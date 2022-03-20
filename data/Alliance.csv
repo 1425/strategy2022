@@ -1,0 +1,337 @@
+"MatchKey","Type","SetNum","MatchNum","MatchTeamKey","TeamNumber","Alliance","Position","match_scouter","auto__tarmac","auto__starting_position","auto__ball1","auto__ball2","auto__ball3","auto__ball4","auto__ball5","auto__inrobot","auto__highhub","auto__lowhub","teleop__highhub","teleop__lowhub","endgame__climb_position","endgame__climbtime","brownout","breakdown"
+"2022orwil_qm1","qm",1,1,"frc1540",1540,"red",1,"Suhaani",true,"4",false,false,false,false,false,false,1,0,10,0,"high",11,false,false
+"2022orwil_qm1","qm",1,1,"frc6696",6696,"red",2,"katelyn",false,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm1","qm",1,1,"frc2990",2990,"red",3,"Gavin",false,"1",false,false,false,false,false,false,1,0,6,0,"traverse",15,false,false
+"2022orwil_qm1","qm",1,1,"frc6343",6343,"blue",1,"Emmet",false,"2",true,false,false,false,false,false,0,0,0,1,"high",0,false,false
+"2022orwil_qm1","qm",1,1,"frc2898",2898,"blue",2,"Sam W",true,"3",false,false,false,false,false,false,0,0,1,0,"mid",0,false,false
+"2022orwil_qm1","qm",1,1,"frc2733",2733,"blue",3,"Aasha",true,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm2","qm",1,2,"frc5970",5970,"red",1,"Suhaani",true,"1",false,false,false,false,false,false,0,0,0,4,"none",0,false,false
+"2022orwil_qm2","qm",1,2,"frc4450",4450,"red",2,"katelyn",true,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm2","qm",1,2,"frc3024",3024,"red",3,"Gavin",true,"2",false,false,false,false,false,false,0,0,4,0,"none",0,false,false
+"2022orwil_qm2","qm",1,2,"frc2915",2915,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,1,0,2,"none",0,true,false
+"2022orwil_qm2","qm",1,2,"frc1359",1359,"blue",2,"Sam W",false,"2",false,false,false,false,false,false,0,1,0,3,"mid",0,false,false
+"2022orwil_qm2","qm",1,2,"frc2635",2635,"blue",3,"Aasha",false,"1",false,false,false,false,false,false,0,1,0,0,"none",0,false,false
+"2022orwil_qm3","qm",1,3,"frc2471",2471,"red",1,"Suhaani",true,"1",false,false,false,false,false,false,1,0,4,0,"none",0,false,false
+"2022orwil_qm3","qm",1,3,"frc3636",3636,"red",2,"atelyn",true,"2",false,false,false,false,false,false,1,0,7,0,"none",0,false,false
+"2022orwil_qm3","qm",1,3,"frc2046",2046,"red",3,"Gavin",true,"4",false,false,false,false,false,false,0,0,0,0,"traverse",5,false,false
+"2022orwil_qm3","qm",1,3,"frc997",997,"blue",1,"Emmet",false,"1",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm3","qm",1,3,"frc4662",4662,"blue",2,"Sam W",false,"3",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm3","qm",1,3,"frc5975",5975,"blue",3,"aasha (team didnt show)",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm4","qm",1,4,"frc3131",3131,"red",1,"Suhaani",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm4","qm",1,4,"frc4057",4057,"red",2,"atelyn",false,"1",false,false,false,false,false,false,0,2,0,4,"none",0,false,false
+"2022orwil_qm4","qm",1,4,"frc1425",1425,"red",3,"Gavin",true,"3",false,false,false,false,false,false,1,0,1,0,"none",0,false,false
+"2022orwil_qm4","qm",1,4,"frc3673",3673,"blue",1,"Emmet",false,"3",false,false,false,false,false,false,0,0,0,1,"mid",0,false,false
+"2022orwil_qm4","qm",1,4,"frc568",568,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,0,0,0,0,"low",0,false,false
+"2022orwil_qm4","qm",1,4,"frc753",753,"blue",3,"aasha",true,"1",false,false,false,false,false,false,0,0,0,0,"high",0,false,false
+"2022orwil_qm5","qm",1,5,"frc6443",6443,"red",1,"Suhaani",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm5","qm",1,5,"frc957",957,"red",2,"katelyn",false,"3",false,false,false,false,false,false,0,0,0,0,"low",10,false,false
+"2022orwil_qm5","qm",1,5,"frc1359",1359,"red",3,"Gavin",true,"2",false,false,false,false,false,false,0,1,0,1,"mid",5,false,false
+"2022orwil_qm5","qm",1,5,"frc4127",4127,"blue",1,"Emmet",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm5","qm",1,5,"frc1540",1540,"blue",2,"Sam W",true,"3",false,false,false,false,false,false,2,0,7,0,"mid",0,false,false
+"2022orwil_qm5","qm",1,5,"frc2374",2374,"blue",3,"aasha",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm6","qm",1,6,"frc2915",2915,"red",1,"suhaani",true,"1",false,false,false,false,false,false,0,0,0,2,"none",0,false,false
+"2022orwil_qm6","qm",1,6,"frc6696",6696,"red",2,"katelyn",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm6","qm",1,6,"frc4450",4450,"red",3,"Gavin",false,"3",false,false,false,false,false,false,1,0,1,0,"mid",6,false,false
+"2022orwil_qm6","qm",1,6,"frc4662",4662,"blue",1,"Emmet",false,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,true
+"2022orwil_qm6","qm",1,6,"frc997",997,"blue",2,"Sam W",true,"1",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm6","qm",1,6,"frc2471",2471,"blue",3,"aasha",true,"4",false,false,false,false,false,false,0,0,2,0,"none",0,false,false
+"2022orwil_qm7","qm",1,7,"frc753",753,"red",1,"suhaani",false,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm7","qm",1,7,"frc2635",2635,"red",2,"katekyn",false,"4",false,false,false,false,false,false,0,0,0,2,"none",0,false,false
+"2022orwil_qm7","qm",1,7,"frc2898",2898,"red",3,"Gavin",false,"2",false,false,false,false,false,false,0,0,0,0,"high",7,false,false
+"2022orwil_qm7","qm",1,7,"frc2046",2046,"blue",1,"asher",true,"4",false,false,false,false,false,false,1,0,8,0,"traverse",5,false,false
+"2022orwil_qm7","qm",1,7,"frc6343",6343,"blue",2,"Sam W",false,"3",false,false,false,false,false,false,0,0,0,1,"none",0,false,false
+"2022orwil_qm7","qm",1,7,"frc4057",4057,"blue",3,"aasha",true,"2",false,false,false,false,false,false,0,1,0,2,"mid",0,false,false
+"2022orwil_qm8","qm",1,8,"frc4127",4127,"red",1,"suhaani",true,"3",false,false,false,false,false,false,0,0,0,0,"mid",5,false,false
+"2022orwil_qm8","qm",1,8,"frc3024",3024,"red",2,"atelyn",false,"2",false,false,false,false,false,false,0,0,1,0,"none",0,false,false
+"2022orwil_qm8","qm",1,8,"frc6443",6443,"red",3,"Gavin",false,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm8","qm",1,8,"frc3131",3131,"blue",1,"asher",false,"3",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm8","qm",1,8,"frc3636",3636,"blue",2,"Sam W",true,"1",false,false,false,false,false,false,0,0,8,0,"traverse",0,false,false
+"2022orwil_qm8","qm",1,8,"frc568",568,"blue",3,"aasha",true,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm9","qm",1,9,"frc1425",1425,"red",1,"Suhaani",true,"3",false,false,false,false,false,false,1,0,0,0,"none",0,false,false
+"2022orwil_qm9","qm",1,9,"frc3673",3673,"red",2,"katelyn",false,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,true
+"2022orwil_qm9","qm",1,9,"frc2733",2733,"red",3,"Gavin",true,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm9","qm",1,9,"frc5970",5970,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,0,2,"mid",0,false,false
+"2022orwil_qm9","qm",1,9,"frc2990",2990,"blue",2,"Sam W",true,"1",false,false,false,false,false,false,2,0,4,0,"traverse",0,false,false
+"2022orwil_qm9","qm",1,9,"frc5975",5975,"blue",3,"aasha(robot didnt show)",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,true,false
+"2022orwil_qm10","qm",1,10,"frc6696",6696,"red",1,"Suhaani",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm10","qm",1,10,"frc2374",2374,"red",2,"katelyn (robot didny shpw)",false,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm10","qm",1,10,"frc2635",2635,"red",3,"Gavin",false,"4",false,false,false,false,false,false,0,0,0,3,"none",0,false,false
+"2022orwil_qm10","qm",1,10,"frc2898",2898,"blue",1,"Emmet",false,"2",false,false,false,false,false,false,0,1,0,4,"mid",0,false,false
+"2022orwil_qm10","qm",1,10,"frc957",957,"blue",2,"Sam W",false,"4",false,false,false,false,false,false,0,0,0,7,"mid",0,false,false
+"2022orwil_qm10","qm",1,10,"frc4057",4057,"blue",3,"aasha",true,"3",false,true,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm11","qm",1,11,"frc4450",4450,"red",1,"Suhaani",false,"1",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm11","qm",1,11,"frc997",997,"red",2,"katelyn",false,"3",false,false,false,false,false,false,0,0,0,0,"traverse",60,false,false
+"2022orwil_qm11","qm",1,11,"frc568",568,"red",3,"Gavin",true,"2",false,false,false,false,false,false,2,0,8,0,"none",0,false,false
+"2022orwil_qm11","qm",1,11,"frc4662",4662,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm11","qm",1,11,"frc6443",6443,"blue",2,"Sam W",false,"3",false,false,false,false,false,false,0,0,1,0,"high",0,false,false
+"2022orwil_qm11","qm",1,11,"frc6343",6343,"blue",3,"aasha",true,"2",false,false,false,false,false,false,1,0,1,0,"mid",0,false,false
+"2022orwil_qm12","qm",1,12,"frc1540",1540,"red",1,"Suhaani",true,"2",false,false,false,false,false,false,2,0,8,0,"none",0,false,false
+"2022orwil_qm12","qm",1,12,"frc2915",2915,"red",2,"katelyn",false,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm12","qm",1,12,"frc2046",2046,"red",3,"Gavin",true,"4",false,false,false,false,false,false,4,0,9,0,"none",0,false,false
+"2022orwil_qm12","qm",1,12,"frc2471",2471,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,1,0,"traverse",0,false,false
+"2022orwil_qm12","qm",1,12,"frc5975",5975,"blue",2,"Sam W",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,true,false
+"2022orwil_qm12","qm",1,12,"frc3131",3131,"blue",3,"aasha(bot didnt show)",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm13","qm",1,13,"frc3024",3024,"red",1,"suhaani",true,"2",false,false,false,false,false,false,0,0,5,0,"none",0,false,false
+"2022orwil_qm13","qm",1,13,"frc2733",2733,"red",2,"katelym",false,"1",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm13","qm",1,13,"frc3673",3673,"red",3,"Gavin",false,"3",false,false,false,false,false,false,0,0,2,0,"high",5,false,false
+"2022orwil_qm13","qm",1,13,"frc2990",2990,"blue",1,"Emmet",false,"1",false,false,false,false,false,false,0,0,5,0,"mid",0,false,false
+"2022orwil_qm13","qm",1,13,"frc1425",1425,"blue",2,"Sam W",false,"3",false,false,false,false,false,false,1,0,5,0,"none",0,false,false
+"2022orwil_qm13","qm",1,13,"frc957",957,"blue",3,"aasha",false,"4",false,false,false,false,false,false,2,0,4,0,"low",0,false,false
+"2022orwil_qm14","qm",1,14,"frc5970",5970,"red",1,"suhaani",true,"2",false,false,false,false,false,false,0,1,0,4,"mid",0,false,false
+"2022orwil_qm14","qm",1,14,"frc4127",4127,"red",2,"katelyn",true,"1",false,false,false,false,false,false,0,0,0,0,"low",0,false,false
+"2022orwil_qm14","qm",1,14,"frc3636",3636,"red",3,"Gavin",false,"3",false,false,false,false,false,false,0,0,6,0,"traverse",10,false,false
+"2022orwil_qm14","qm",1,14,"frc753",753,"blue",1,"asher",false,"1",false,false,false,false,false,false,0,0,3,0,"none",0,false,false
+"2022orwil_qm14","qm",1,14,"frc1359",1359,"blue",2,"Sam W",false,"3",false,false,false,false,false,false,0,0,0,3,"low",0,false,false
+"2022orwil_qm14","qm",1,14,"frc2374",2374,"blue",3,"",true,"2",false,false,false,false,false,false,0,0,1,1,"mid",0,false,false
+"2022orwil_qm15","qm",1,15,"frc5975",5975,"red",1,"suhaani",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm15","qm",1,15,"frc2915",2915,"red",2,"katelyn",false,"1",false,false,false,false,false,false,0,1,0,6,"none",0,false,false
+"2022orwil_qm15","qm",1,15,"frc6343",6343,"red",3,"Gavin",false,"4",false,false,false,false,false,false,0,1,0,3,"high",15,false,false
+"2022orwil_qm15","qm",1,15,"frc2046",2046,"blue",1,"asher",true,"4",false,false,false,false,false,false,3,0,8,0,"traverse",8,false,false
+"2022orwil_qm15","qm",1,15,"frc6443",6443,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,1,0,4,0,"none",0,false,false
+"2022orwil_qm15","qm",1,15,"frc4450",4450,"blue",3,"aasha",true,"1",true,false,false,false,false,false,2,0,0,0,"none",0,false,false
+"2022orwil_qm16","qm",1,16,"frc957",957,"red",1,"Suhaani",true,"4",false,false,false,false,false,false,0,0,7,0,"mid",6,false,false
+"2022orwil_qm16","qm",1,16,"frc4662",4662,"red",2,"katelyn",true,"3",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm16","qm",1,16,"frc3024",3024,"red",3,"Gavin",true,"4",false,false,false,false,false,false,0,0,1,0,"traverse",0,false,false
+"2022orwil_qm16","qm",1,16,"frc3131",3131,"blue",1,"asher",false,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm16","qm",1,16,"frc2898",2898,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,0,2,0,2,"mid",0,false,false
+"2022orwil_qm16","qm",1,16,"frc997",997,"blue",3,"aasha",true,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm17","qm",1,17,"frc4057",4057,"red",1,"",true,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm17","qm",1,17,"frc753",753,"red",2,"",false,"2",false,false,false,false,false,true,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm17","qm",1,17,"frc2471",2471,"red",3,"casey",false,"4",false,false,true,true,false,false,0,0,6,0,"mid",7,false,false
+"2022orwil_qm17","qm",1,17,"frc1540",1540,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,5,0,"low",0,false,false
+"2022orwil_qm17","qm",1,17,"frc3673",3673,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,0,0,0,4,"none",0,false,false
+"2022orwil_qm17","qm",1,17,"frc3636",3636,"blue",3,"aasha",true,"1",false,false,false,false,false,false,0,0,4,0,"traverse",0,false,false
+"2022orwil_qm18","qm",1,18,"frc4127",4127,"red",1,"Suhaani",true,"1",false,false,false,false,false,false,0,0,0,0,"low",0,false,false
+"2022orwil_qm18","qm",1,18,"frc2990",2990,"red",2,"",false,"4",false,false,false,false,false,true,0,0,1,0,"traverse",0,false,false
+"2022orwil_qm18","qm",1,18,"frc2733",2733,"red",3,"casey",false,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm18","qm",1,18,"frc1359",1359,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,1,0,2,"mid",0,false,false
+"2022orwil_qm18","qm",1,18,"frc2635",2635,"blue",2,"Sam W",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm18","qm",1,18,"frc5970",5970,"blue",3,"aasha",true,"2",false,false,false,false,false,false,1,0,0,5,"mid",0,false,false
+"2022orwil_qm19","qm",1,19,"frc1425",1425,"red",1,"Suhaani",true,"3",false,false,false,false,false,false,3,0,2,0,"none",0,false,false
+"2022orwil_qm19","qm",1,19,"frc2374",2374,"red",2,"",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm19","qm",1,19,"frc2915",2915,"red",3,"casey",false,"1",false,false,false,false,false,false,0,1,0,7,"none",0,false,false
+"2022orwil_qm19","qm",1,19,"frc6696",6696,"blue",1,"Emmet",false,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm19","qm",1,19,"frc568",568,"blue",2,"Sam W",false,"3",false,false,false,false,false,false,0,1,0,0,"none",0,true,false
+"2022orwil_qm19","qm",1,19,"frc957",957,"blue",3,"aasha",true,"4",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm20","qm",1,20,"frc997",997,"red",1,"Suhaani",false,"1",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm20","qm",1,20,"frc2046",2046,"red",2,"",true,"4",false,false,false,false,false,false,0,0,9,0,"none",0,false,false
+"2022orwil_qm20","qm",1,20,"frc2898",2898,"red",3,"casey",false,"2",true,false,false,false,false,false,0,2,0,2,"mid",8,false,false
+"2022orwil_qm20","qm",1,20,"frc1540",1540,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,2,0,7,0,"mid",0,false,false
+"2022orwil_qm20","qm",1,20,"frc4450",4450,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,1,0,2,0,"none",0,false,false
+"2022orwil_qm20","qm",1,20,"frc3673",3673,"blue",3,"aasha",true,"1",false,false,false,false,false,false,0,0,0,1,"traverse",0,false,false
+"2022orwil_qm21","qm",1,21,"frc3131",3131,"red",1,"",true,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm21","qm",1,21,"frc6343",6343,"red",2,"",false,"2",false,false,false,false,false,true,0,2,0,2,"none",0,false,false
+"2022orwil_qm21","qm",1,21,"frc5970",5970,"red",3,"casey",false,"4",false,false,true,false,false,false,0,1,0,6,"mid",5,false,false
+"2022orwil_qm21","qm",1,21,"frc3636",3636,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,5,0,"high",0,false,false
+"2022orwil_qm21","qm",1,21,"frc4662",4662,"blue",2,"Sam W",true,"1",false,false,false,false,false,false,1,0,1,0,"none",0,false,false
+"2022orwil_qm21","qm",1,21,"frc4057",4057,"blue",3,"aasha",true,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm22","qm",1,22,"frc2635",2635,"red",1,"",true,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,true
+"2022orwil_qm22","qm",1,22,"frc2990",2990,"red",2,"",true,"2",false,false,false,false,false,true,2,0,1,0,"traverse",0,false,false
+"2022orwil_qm22","qm",1,22,"frc6443",6443,"red",3,"casey",false,"3",false,true,false,false,false,false,1,0,2,0,"high",5,false,false
+"2022orwil_qm22","qm",1,22,"frc6696",6696,"blue",1,"Emmet",false,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm22","qm",1,22,"frc5975",5975,"blue",2,"Sam W",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm22","qm",1,22,"frc4127",4127,"blue",3,"aasha",true,"3",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm23","qm",1,23,"frc2733",2733,"red",1,"",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm23","qm",1,23,"frc753",753,"red",2,"",false,"2",false,false,false,false,false,true,0,0,0,0,"none",0,false,false
+"2022orwil_qm23","qm",1,23,"frc568",568,"red",3,"casey",false,"4",false,false,true,false,false,false,0,0,0,0,"low",6,false,false
+"2022orwil_qm23","qm",1,23,"frc1425",1425,"blue",1,"Emmet",false,"3",false,false,false,false,false,false,2,0,4,1,"none",0,false,false
+"2022orwil_qm23","qm",1,23,"frc2471",2471,"blue",2,"Sam W",false,"1",false,false,false,false,false,false,1,0,2,0,"mid",0,false,false
+"2022orwil_qm23","qm",1,23,"frc1359",1359,"blue",3,"aasha",true,"2",false,false,false,false,false,false,0,1,0,3,"none",0,false,false
+"2022orwil_qm24","qm",1,24,"frc3024",3024,"red",1,"",true,"2",false,false,false,false,false,false,0,0,6,0,"none",0,false,false
+"2022orwil_qm24","qm",1,24,"frc1540",1540,"red",2,"",true,"4",false,false,false,false,false,false,2,0,3,0,"mid",0,false,false
+"2022orwil_qm24","qm",1,24,"frc3131",3131,"red",3,"casey",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm24","qm",1,24,"frc2374",2374,"blue",1,"Emmet",false,"2",false,false,false,false,false,false,1,0,1,0,"none",0,false,false
+"2022orwil_qm24","qm",1,24,"frc5970",5970,"blue",2,"Sam W",true,"3",false,false,false,false,false,false,0,1,0,5,"mid",0,false,false
+"2022orwil_qm24","qm",1,24,"frc4662",4662,"blue",3,"aasha",true,"1",false,false,false,false,false,false,1,0,0,0,"none",0,false,true
+"2022orwil_qm25","qm",1,25,"frc3636",3636,"red",1,"",true,"4",false,false,false,false,false,false,0,0,9,0,"traverse",9,false,false
+"2022orwil_qm25","qm",1,25,"frc957",957,"red",2,"katelun",true,"1",false,false,false,false,false,false,0,0,1,0,"mid",3,false,false
+"2022orwil_qm25","qm",1,25,"frc2915",2915,"red",3,"casey",false,"2",false,false,false,false,false,false,0,1,0,8,"none",0,false,false
+"2022orwil_qm25","qm",1,25,"frc2046",2046,"blue",1,"Emmet",false,"3",false,false,false,false,false,false,0,0,4,0,"traverse",0,false,false
+"2022orwil_qm25","qm",1,25,"frc3673",3673,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,0,0,0,5,"mid",0,false,false
+"2022orwil_qm25","qm",1,25,"frc4127",4127,"blue",3,"aasha",true,"1",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm26","qm",1,26,"frc4450",4450,"red",1,"",true,"1",false,false,false,false,false,false,0,0,1,0,"mid",12,false,false
+"2022orwil_qm26","qm",1,26,"frc2898",2898,"red",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm26","qm",1,26,"frc2471",2471,"red",3,"casey",false,"4",false,false,false,false,false,false,0,1,3,2,"high",0,false,false
+"2022orwil_qm26","qm",1,26,"frc6443",6443,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,0,0,"mid",10,false,false
+"2022orwil_qm26","qm",1,26,"frc753",753,"blue",2,"Sam W",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,true,false
+"2022orwil_qm26","qm",1,26,"frc1425",1425,"blue",3,"aasha",true,"3",false,false,false,false,false,false,1,0,2,0,"none",0,false,false
+"2022orwil_qm27","qm",1,27,"frc2374",2374,"red",1,"",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm27","qm",1,27,"frc568",568,"red",2,"kateoy'm",false,"4",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm27","qm",1,27,"frc2990",2990,"red",3,"casey",false,"1",true,false,false,false,false,false,1,0,4,0,"traverse",7,false,false
+"2022orwil_qm27","qm",1,27,"frc2635",2635,"blue",1,"Emmet",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,true,false
+"2022orwil_qm27","qm",1,27,"frc4057",4057,"blue",2,"Sam W",true,"4",false,false,false,false,false,false,0,0,0,6,"none",0,false,false
+"2022orwil_qm27","qm",1,27,"frc3024",3024,"blue",3,"aasha",true,"2",false,false,false,false,false,false,0,0,4,0,"none",0,false,false
+"2022orwil_qm28","qm",1,28,"frc2733",2733,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,0,"traverse",23,false,false
+"2022orwil_qm28","qm",1,28,"frc5975",5975,"red",2,"katelyn",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm28","qm",1,28,"frc1359",1359,"red",3,"casey",false,"4",false,false,true,false,false,false,0,1,0,7,"mid",3,false,false
+"2022orwil_qm28","qm",1,28,"frc6343",6343,"blue",1,"Emmet",false,"3",false,false,false,false,false,false,0,0,0,2,"mid",5,false,false
+"2022orwil_qm28","qm",1,28,"frc997",997,"blue",2,"Sam W",true,"4",false,false,false,false,false,false,0,1,0,0,"traverse",0,false,false
+"2022orwil_qm28","qm",1,28,"frc6696",6696,"blue",3,"aasha",true,"2",false,false,false,false,false,false,0,0,0,0,"low",0,false,false
+"2022orwil_qm29","qm",1,29,"frc4662",4662,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm29","qm",1,29,"frc1540",1540,"red",2,"katie",false,"4",false,false,false,false,false,false,2,0,3,0,"mid",0,false,false
+"2022orwil_qm29","qm",1,29,"frc1425",1425,"red",3,"casey",false,"3",false,true,false,false,false,false,2,0,1,2,"none",0,false,false
+"2022orwil_qm29","qm",1,29,"frc753",753,"blue",1,"Romqk",true,"2",false,false,false,false,false,false,1,0,0,0,"none",0,false,false
+"2022orwil_qm29","qm",1,29,"frc5970",5970,"blue",2,"john",true,"4",false,false,false,false,false,false,0,0,0,7,"mid",0,false,false
+"2022orwil_qm29","qm",1,29,"frc2915",2915,"blue",3,"aasha",true,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm30","qm",1,30,"frc957",957,"red",1,"",false,"4",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm30","qm",1,30,"frc3131",3131,"red",2,"alison",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm30","qm",1,30,"frc2374",2374,"red",3,"casey",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm30","qm",1,30,"frc3636",3636,"blue",1,"alex",false,"1",false,false,false,false,false,false,0,0,10,0,"traverse",0,false,false
+"2022orwil_qm30","qm",1,30,"frc2898",2898,"blue",2,"john",true,"4",false,false,false,false,false,false,0,0,0,2,"mid",4,false,false
+"2022orwil_qm30","qm",1,30,"frc2990",2990,"blue",3,"aasha",true,"4",false,false,false,false,false,false,1,0,2,0,"traverse",0,false,false
+"2022orwil_qm31","qm",1,31,"frc3024",3024,"red",1,"",true,"2",false,false,false,false,false,false,0,0,2,0,"none",0,false,false
+"2022orwil_qm31","qm",1,31,"frc997",997,"red",2,"alison",false,"1",false,false,false,false,false,false,0,1,0,0,"traverse",17,false,false
+"2022orwil_qm31","qm",1,31,"frc1359",1359,"red",3,"casey",false,"3",false,false,true,false,false,false,0,1,0,4,"none",0,false,false
+"2022orwil_qm31","qm",1,31,"frc3673",3673,"blue",1,"alex",false,"2",false,false,false,false,false,false,0,0,0,4,"none",0,false,false
+"2022orwil_qm31","qm",1,31,"frc6443",6443,"blue",2,"john",true,"1",false,false,false,false,false,false,1,0,0,0,"high",20,false,false
+"2022orwil_qm31","qm",1,31,"frc4057",4057,"blue",3,"aasha",false,"4",false,false,false,false,false,false,0,1,0,8,"none",0,false,false
+"2022orwil_qm32","qm",1,32,"frc2635",2635,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm32","qm",1,32,"frc6343",6343,"red",2,"alison",false,"2",false,false,false,false,false,false,0,0,0,2,"mid",10,false,false
+"2022orwil_qm32","qm",1,32,"frc4127",4127,"red",3,"casey",false,"3",false,false,false,false,false,false,0,0,0,0,"mid",8,false,false
+"2022orwil_qm32","qm",1,32,"frc568",568,"blue",1,"alex",false,"1",false,false,false,false,false,false,0,0,0,0,"mid",0,false,false
+"2022orwil_qm32","qm",1,32,"frc4450",4450,"blue",2,"john",true,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm32","qm",1,32,"frc5975",5975,"blue",3,"aasha",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm33","qm",1,33,"frc2046",2046,"red",1,"",true,"4",false,false,false,false,false,false,4,0,11,0,"traverse",5,false,false
+"2022orwil_qm33","qm",1,33,"frc6696",6696,"red",2,"alison",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm33","qm",1,33,"frc3131",3131,"red",3,"casey   ",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm33","qm",1,33,"frc2733",2733,"blue",1,"alex",false,"1",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm33","qm",1,33,"frc2471",2471,"blue",2,"john",true,"4",false,false,false,false,false,false,0,0,1,0,"mid",8,false,false
+"2022orwil_qm33","qm",1,33,"frc2374",2374,"blue",3,"aasha",true,"2",false,false,false,false,false,false,1,0,0,0,"none",0,false,false
+"2022orwil_qm34","qm",1,34,"frc1359",1359,"red",1,"",true,"3",false,false,false,false,false,false,0,0,0,6,"none",0,false,false
+"2022orwil_qm34","qm",1,34,"frc3636",3636,"red",2,"alison",false,"1",true,false,false,false,false,false,0,0,2,2,"traverse",0,false,true
+"2022orwil_qm34","qm",1,34,"frc3673",3673,"red",3,"casey",true,"3",false,false,false,false,false,false,0,0,0,4,"none",0,false,false
+"2022orwil_qm34","qm",1,34,"frc2898",2898,"blue",1,"alex",false,"2",false,false,false,false,false,false,0,2,0,0,"none",0,false,false
+"2022orwil_qm34","qm",1,34,"frc1425",1425,"blue",2,"john",true,"3",false,false,false,false,false,false,0,0,6,0,"none",0,false,false
+"2022orwil_qm34","qm",1,34,"frc1540",1540,"blue",3,"aasha",true,"3",false,false,false,false,false,false,1,0,5,0,"mid",0,false,false
+"2022orwil_qm35","qm",1,35,"frc753",753,"red",1,"",false,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm35","qm",1,35,"frc4127",4127,"red",2,"alison",false,"1",false,false,false,false,false,false,0,0,0,0,"mid",4,false,false
+"2022orwil_qm35","qm",1,35,"frc4662",4662,"red",3,"casey",true,"4",false,false,false,false,false,false,0,0,0,0,"mid",6,false,false
+"2022orwil_qm35","qm",1,35,"frc5975",5975,"blue",1,"alex",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm35","qm",1,35,"frc2635",2635,"blue",2,"lily",false,"3",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm35","qm",1,35,"frc957",957,"blue",3,"aasha",false,"4",false,false,false,false,false,false,2,0,0,0,"traverse",0,false,true
+"2022orwil_qm36","qm",1,36,"frc5970",5970,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,6,"mid",0,false,false
+"2022orwil_qm36","qm",1,36,"frc568",568,"red",2,"alison",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm36","qm",1,36,"frc2046",2046,"red",3,"casey",false,"4",false,false,false,false,false,false,0,0,5,0,"traverse",5,false,false
+"2022orwil_qm36","qm",1,36,"frc2733",2733,"blue",1,"alex",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm36","qm",1,36,"frc3024",3024,"blue",2,"lily",true,"2",false,false,false,false,false,false,0,0,4,0,"traverse",0,false,true
+"2022orwil_qm36","qm",1,36,"frc6696",6696,"blue",3,"john",true,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm37","qm",1,37,"frc997",997,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm37","qm",1,37,"frc4057",4057,"red",2,"alison",true,"4",false,true,false,false,false,false,0,1,0,10,"none",0,false,false
+"2022orwil_qm37","qm",1,37,"frc6443",6443,"red",3,"casey",false,"1",true,false,false,false,false,false,0,0,1,0,"high",13,false,false
+"2022orwil_qm37","qm",1,37,"frc2915",2915,"blue",1,"alex",false,"2",false,false,false,false,false,false,0,0,2,0,"none",0,false,false
+"2022orwil_qm37","qm",1,37,"frc2990",2990,"blue",2,"lily",true,"1",false,false,false,false,false,false,0,0,9,0,"traverse",9,false,false
+"2022orwil_qm37","qm",1,37,"frc2471",2471,"blue",3,"aasha",false,"3",false,false,false,false,false,false,1,0,8,0,"mid",0,false,false
+"2022orwil_qm38","qm",1,38,"frc6343",6343,"red",1,"",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm38","qm",1,38,"frc3636",3636,"red",2,"alison",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm38","qm",1,38,"frc1425",1425,"red",3,"casey",false,"3",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm38","qm",1,38,"frc4450",4450,"blue",1,"alex",false,"3",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm38","qm",1,38,"frc3131",3131,"blue",2,"lily",false,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm38","qm",1,38,"frc2635",2635,"blue",3,"aasha",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm39","qm",1,39,"frc2898",2898,"red",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm39","qm",1,39,"frc5975",5975,"red",2,"alison",false,"4",false,false,false,false,false,false,0,0,0,0,"low",23,false,false
+"2022orwil_qm39","qm",1,39,"frc3673",3673,"red",3,"casey",false,"4",false,false,true,false,false,false,0,0,0,5,"mid",6,false,false
+"2022orwil_qm39","qm",1,39,"frc1359",1359,"blue",1,"alex",false,"3",false,false,false,false,false,false,0,1,0,0,"traverse",0,false,false
+"2022orwil_qm39","qm",1,39,"frc4662",4662,"blue",2,"lily",true,"1",false,false,false,false,false,false,0,0,4,0,"mid",3,false,false
+"2022orwil_qm39","qm",1,39,"frc6696",6696,"blue",3,"Emmet ",false,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,true
+"2022orwil_qm40","qm",1,40,"frc2990",2990,"red",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm40","qm",1,40,"frc2374",2374,"red",2,"alison",false,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm40","qm",1,40,"frc997",997,"red",3,"casey",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm40","qm",1,40,"frc3024",3024,"blue",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm40","qm",1,40,"frc2046",2046,"blue",2,"lily",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm40","qm",1,40,"frc753",753,"blue",3,"Emmet",false,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm41","qm",1,41,"frc4450",4450,"red",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm41","qm",1,41,"frc6343",6343,"red",2,"",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm41","qm",1,41,"frc957",957,"red",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm41","qm",1,41,"frc4057",4057,"blue",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm41","qm",1,41,"frc5970",5970,"blue",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm41","qm",1,41,"frc1540",1540,"blue",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm42","qm",1,42,"frc6443",6443,"red",1,"",true,"3",false,false,false,false,false,false,1,0,0,0,"mid",7,false,false
+"2022orwil_qm42","qm",1,42,"frc2733",2733,"red",2,"Sam W",true,"2",false,false,false,false,false,false,1,0,0,0,"traverse",0,false,false
+"2022orwil_qm42","qm",1,42,"frc2915",2915,"red",3,"asher",true,"1",false,false,false,false,false,false,0,1,0,5,"none",0,false,false
+"2022orwil_qm42","qm",1,42,"frc4127",4127,"blue",1,"aasha",true,"4",false,false,false,false,false,false,0,0,0,5,"none",0,false,false
+"2022orwil_qm42","qm",1,42,"frc2471",2471,"blue",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm42","qm",1,42,"frc568",568,"blue",3,"",true,"2",false,false,false,false,false,false,0,1,0,0,"none",0,false,false
+"2022orwil_qm43","qm",1,43,"frc3636",3636,"red",1,"",true,"4",false,false,false,false,false,false,1,0,0,0,"none",0,false,false
+"2022orwil_qm43","qm",1,43,"frc753",753,"red",2,"Sam W",true,"1",false,false,false,false,false,false,0,1,1,0,"none",0,false,false
+"2022orwil_qm43","qm",1,43,"frc6696",6696,"red",3,"asher",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm43","qm",1,43,"frc2635",2635,"blue",1,"aasha",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm43","qm",1,43,"frc1359",1359,"blue",2,"lily",true,"2",false,false,false,false,false,false,0,0,0,6,"traverse",4,false,false
+"2022orwil_qm43","qm",1,43,"frc2046",2046,"blue",3,"alison",true,"4",false,false,false,false,false,false,0,0,11,0,"traverse",5,false,false
+"2022orwil_qm44","qm",1,44,"frc4662",4662,"red",1,"",true,"1",false,false,false,false,false,false,0,0,3,0,"mid",0,false,false
+"2022orwil_qm44","qm",1,44,"frc1425",1425,"red",2,"Sam W",true,"3",false,false,false,false,false,false,0,0,7,0,"none",0,false,false
+"2022orwil_qm44","qm",1,44,"frc4450",4450,"red",3,"asher",true,"2",false,false,false,false,false,false,1,0,0,0,"none",0,false,false
+"2022orwil_qm44","qm",1,44,"frc4057",4057,"blue",1,"aasha",true,"4",false,false,false,false,false,false,0,1,0,3,"none",0,false,false
+"2022orwil_qm44","qm",1,44,"frc3024",3024,"blue",2,"lily",true,"2",false,false,false,false,false,false,2,0,4,0,"none",0,false,false
+"2022orwil_qm44","qm",1,44,"frc2990",2990,"blue",3,"alison",true,"2",false,false,false,false,false,false,1,0,4,0,"traverse",14,false,false
+"2022orwil_qm45","qm",1,45,"frc2898",2898,"red",1,"",false,"2",false,false,false,false,false,false,0,2,0,6,"none",0,false,false
+"2022orwil_qm45","qm",1,45,"frc3131",3131,"red",2,"Sam W",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm45","qm",1,45,"frc6443",6443,"red",3,"asher",true,"3",false,false,false,false,false,false,1,0,0,1,"high",13,false,false
+"2022orwil_qm45","qm",1,45,"frc2915",2915,"blue",1,"aasha",true,"1",false,false,false,false,false,false,0,1,0,6,"none",0,false,false
+"2022orwil_qm45","qm",1,45,"frc4127",4127,"blue",2,"lily",true,"2",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm45","qm",1,45,"frc997",997,"blue",3,"alison",true,"4",false,false,false,false,false,false,0,1,0,0,"high",18,false,false
+"2022orwil_qm46","qm",1,46,"frc568",568,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm46","qm",1,46,"frc2471",2471,"red",2,"Sam W",true,"3",false,false,false,false,false,false,0,0,5,0,"mid",0,false,false
+"2022orwil_qm46","qm",1,46,"frc5970",5970,"red",3,"asher",true,"1",false,false,false,false,false,false,0,1,0,2,"mid",9,false,false
+"2022orwil_qm46","qm",1,46,"frc957",957,"blue",1,"aasha",false,"4",false,false,false,false,false,false,0,0,3,0,"none",0,false,false
+"2022orwil_qm46","qm",1,46,"frc3673",3673,"blue",2,"lily",false,"3",false,false,false,false,false,false,0,0,0,4,"none",0,false,false
+"2022orwil_qm46","qm",1,46,"frc6343",6343,"blue",3,"alison",true,"2",false,false,false,false,false,false,0,0,0,5,"mid",13,false,false
+"2022orwil_qm47","qm",1,47,"frc5975",5975,"red",1,"",false,"2",false,false,false,false,false,false,0,0,0,0,"low",0,false,false
+"2022orwil_qm47","qm",1,47,"frc1540",1540,"red",2,"Sam W",true,"4",false,false,false,false,false,false,3,0,9,0,"high",0,false,false
+"2022orwil_qm47","qm",1,47,"frc753",753,"red",3,"asher",true,"1",false,false,false,false,false,false,0,1,0,0,"none",0,false,true
+"2022orwil_qm47","qm",1,47,"frc2374",2374,"blue",1,"aasha(taken off field)",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm47","qm",1,47,"frc2733",2733,"blue",2,"lily",true,"3",false,false,false,false,false,false,0,0,0,0,"traverse",5,false,false
+"2022orwil_qm47","qm",1,47,"frc4450",4450,"blue",3,"alison",true,"1",false,false,false,false,false,false,1,0,0,0,"mid",10,false,false
+"2022orwil_qm48","qm",1,48,"frc1359",1359,"red",1,"",true,"4",false,false,false,false,false,false,0,1,0,2,"mid",0,false,false
+"2022orwil_qm48","qm",1,48,"frc4127",4127,"red",2,"Sam W",true,"4",false,false,false,false,false,false,0,0,0,0,"low",0,false,false
+"2022orwil_qm48","qm",1,48,"frc2898",2898,"red",3,"asher",false,"1",false,false,false,false,false,false,1,0,0,5,"low",12,false,false
+"2022orwil_qm48","qm",1,48,"frc2990",2990,"blue",1,"aasha",false,"1",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm48","qm",1,48,"frc2046",2046,"blue",2,"lily",true,"4",false,false,true,false,false,false,3,0,8,0,"traverse",3,false,false
+"2022orwil_qm48","qm",1,48,"frc4662",4662,"blue",3,"alison",true,"2",false,false,false,false,false,false,1,0,1,0,"mid",4,false,false
+"2022orwil_qm49","qm",1,49,"frc6696",6696,"red",1,"",true,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,true
+"2022orwil_qm49","qm",1,49,"frc6443",6443,"red",2,"Sam W",true,"3",false,false,false,false,false,false,1,0,1,0,"mid",0,false,false
+"2022orwil_qm49","qm",1,49,"frc5970",5970,"red",3,"asher",true,"1",false,false,false,false,false,false,0,1,0,0,"mid",8,false,false
+"2022orwil_qm49","qm",1,49,"frc3673",3673,"blue",1,"aasha",true,"2",false,false,false,false,false,false,0,0,0,2,"mid",0,false,false
+"2022orwil_qm49","qm",1,49,"frc2915",2915,"blue",2,"casey",false,"4",false,false,true,false,false,false,0,1,0,9,"none",0,false,false
+"2022orwil_qm49","qm",1,49,"frc3131",3131,"blue",3,"alison",false,"1",false,false,false,false,false,false,0,0,0,0,"none",0,false,true
+"2022orwil_qm50","qm",1,50,"frc997",997,"red",1,"",true,"2",false,false,false,false,false,false,0,1,0,0,"traverse",17,false,false
+"2022orwil_qm50","qm",1,50,"frc2733",2733,"red",2,"Sam W",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm50","qm",1,50,"frc2635",2635,"red",3,"asher",true,"4",false,false,false,false,false,false,0,0,2,0,"none",0,true,true
+"2022orwil_qm50","qm",1,50,"frc6343",6343,"blue",1,"aasha",true,"2",false,false,false,false,false,false,0,1,0,6,"high",0,false,false
+"2022orwil_qm50","qm",1,50,"frc2374",2374,"blue",2,"casey",false,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm50","qm",1,50,"frc3636",3636,"blue",3,"lily",false,"4",false,false,true,false,false,false,7,0,0,0,"traverse",5,false,false
+"2022orwil_qm51","qm",1,51,"frc2471",2471,"red",1,"",false,"1",true,false,false,false,false,false,1,0,6,0,"traverse",13,false,false
+"2022orwil_qm51","qm",1,51,"frc957",957,"red",2,"Sam W",true,"2",false,false,false,false,false,false,1,0,3,0,"mid",0,false,false
+"2022orwil_qm51","qm",1,51,"frc1540",1540,"red",3,"asher",true,"4",false,false,false,false,false,false,2,0,9,0,"none",0,false,false
+"2022orwil_qm51","qm",1,51,"frc5975",5975,"blue",1,"john",true,"4",false,false,false,false,false,false,0,0,0,0,"none",0,false,false
+"2022orwil_qm51","qm",1,51,"frc1425",1425,"blue",2,"casey :)",false,"3",false,false,false,false,false,false,1,0,6,0,"none",0,false,false
+"2022orwil_qm51","qm",1,51,"frc3024",3024,"blue",3,"alison",false,"2",false,false,false,false,false,false,0,0,1,0,"none",0,false,false
+"2022orwil_qm52","qm",1,52,"frc4057",4057,"red",1,"casey",false,"4",false,false,true,true,false,false,0,0,0,9,"traverse",0,false,false
+"2022orwil_qm52","qm",1,52,"frc4450",4450,"red",2,"Sam W",true,"1",false,false,false,false,false,false,1,0,0,0,"traverse",0,false,false
+"2022orwil_qm52","qm",1,52,"frc4127",4127,"red",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm52","qm",1,52,"frc568",568,"blue",1,"asher",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm52","qm",1,52,"frc6696",6696,"blue",2,"alison",true,"3",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm52","qm",1,52,"frc2898",2898,"blue",3,"john",false,"2",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm53","qm",1,53,"frc3673",3673,"red",1,"casey",false,"4",false,false,false,false,false,false,0,0,0,0,"traverse",0,false,false
+"2022orwil_qm53","qm",1,53,"frc2915",2915,"red",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm53","qm",1,53,"frc4662",4662,"red",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm53","qm",1,53,"frc2990",2990,"blue",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm53","qm",1,53,"frc3131",3131,"blue",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm53","qm",1,53,"frc753",753,"blue",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm54","qm",1,54,"frc2471",2471,"red",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm54","qm",1,54,"frc3024",3024,"red",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm54","qm",1,54,"frc6343",6343,"red",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm54","qm",1,54,"frc6443",6443,"blue",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm54","qm",1,54,"frc1359",1359,"blue",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm54","qm",1,54,"frc3636",3636,"blue",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm55","qm",1,55,"frc2374",2374,"red",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm55","qm",1,55,"frc4057",4057,"red",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm55","qm",1,55,"frc5975",5975,"red",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm55","qm",1,55,"frc1425",1425,"blue",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm55","qm",1,55,"frc5970",5970,"blue",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm55","qm",1,55,"frc997",997,"blue",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm56","qm",1,56,"frc568",568,"red",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm56","qm",1,56,"frc2635",2635,"red",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm56","qm",1,56,"frc1540",1540,"red",3,,,,,,,,,,,,,,,,,
+"2022orwil_qm56","qm",1,56,"frc957",957,"blue",1,,,,,,,,,,,,,,,,,
+"2022orwil_qm56","qm",1,56,"frc2046",2046,"blue",2,,,,,,,,,,,,,,,,,
+"2022orwil_qm56","qm",1,56,"frc2733",2733,"blue",3,,,,,,,,,,,,,,,,,

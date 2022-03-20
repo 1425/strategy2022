@@ -1,0 +1,12 @@
+This is designed to make picks for the 2022 FIRST Robotics Competition
+
+TODO:
+-Switch to Ceres/cminwhatever for the least squares stuff.
+-Improve the actual alliance evaluation
+-Make it so that on the capabilities page, lists the data source
+
+climb sets on an alliance:
+	-would be interesting to know
+	-would be interesting to know when those are because of penalty
+	-can know if because of penalty when have zebra data that says they aren't close to where they'd need to be
+	-can track when a robot is just dead if it isn't moving for a long time during the middle of the match
