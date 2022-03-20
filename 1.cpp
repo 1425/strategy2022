@@ -449,6 +449,7 @@ struct Args{
 	tba::Event_key event_key{"2022orwil"};
 	bool verbose=0;
 	bool compare=0;
+	std::optional<Team> team_details;
 };
 
 Args parse_args(int argc,char **argv){
@@ -481,6 +482,14 @@ Args parse_args(int argc,char **argv){
 			"Which team to make the list for",
 			[&](std::vector<std::string> v){
 				r.team=Team{stoi(v[0])};
+			}
+		},
+		{
+			"--team_details",
+			{"TEAM"},
+			"Show info about a team rather than making a picklist",
+			[&](std::vector<std::string> v){
+				r.team_details=Team{stoi(v[0])};
 			}
 		},
 		{
@@ -604,6 +613,11 @@ int main(int argc,char **argv){
 	auto m=mapf([](auto x){ return x.second.size(); },available);
 	cout<<"Number of times that a team appears in that # of sources:"<<count(m)<<"\n";
 	cout<<"Teams appearing in each dataset:"<<mapf([](auto x){ return make_pair(x.first,x.second.size()); },v)<<"\n";
+
+	if(args.team_details){
+		team_details(args.scouting_data_path,*args.team_details);
+		return 0;
+	}
 
 	if(args.compare){
 		using Source=string;

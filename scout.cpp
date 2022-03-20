@@ -51,7 +51,7 @@ ostream& operator<<(std::ostream& o,Useful_data const& a){
 	return o<<" }";
 }
 
-map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
+vector<Useful_data> parse_csv_inner(std::string const& filename,bool verbose){
 	ifstream f(filename);
 
 	vector<vector<string>> data;
@@ -108,6 +108,17 @@ map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 	}
 	cout<<"Good rows:"<<vu.size()<<" ("<<vu.size()/6.0<<" matches)\n";
 
+	return vu;
+}
+
+void team_details(string const& filename,Team const& team){
+	auto p=parse_csv_inner(filename,1);
+	auto f=filter([=](auto x){ return x.team==team; },p);
+	print_lines(f);
+}
+
+map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
+	auto vu=parse_csv_inner(filename,verbose);
 	//things to look at:
 	//how many matches for each team
 	//set of teams is different in the same match
@@ -132,7 +143,7 @@ map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 					);
 					return Auto{map_values(
 						[](auto data){
-							return mean_d(ITEMS(taxi))+mean_d(ITEMS(auto_high))*4+mean_d(ITEMS(auto_low))*2;
+							return mean_d(ITEMS(taxi))*2+mean_d(ITEMS(auto_high))*4+mean_d(ITEMS(auto_low))*2;
 						},
 						g
 					)};
