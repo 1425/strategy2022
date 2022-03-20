@@ -75,12 +75,14 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 		assert(m);
 		auto s=*m;
 		if(!std::holds_alternative<tba::Match_Score_Breakdown_2022>(s)){
-			PRINT(s);
+			PRINT(match.key);
+		} else{
+			auto scores=std::get<tba::Match_Score_Breakdown_2022>(s);
+			process_alliance(match.alliances.red,scores.red);
+			process_alliance(match.alliances.blue,scores.blue);
+		
 		}
-		assert(std::holds_alternative<tba::Match_Score_Breakdown_2022>(s));
-		auto scores=std::get<tba::Match_Score_Breakdown_2022>(s);
-		process_alliance(match.alliances.red,scores.red);
-		process_alliance(match.alliances.blue,scores.blue);
+		//assert(std::holds_alternative<tba::Match_Score_Breakdown_2022>(s));
 	}
 
 	auto avg_auto_cargo_upper=solve1(auto_cargo_upper);

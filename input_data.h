@@ -9,6 +9,9 @@
 using Team=Int_limited<1,10*1000>;
 
 using Endgame=tba::Endgame_2022;
+
+std::ostream& operator<<(std::ostream&,Endgame const&);
+
 std::vector<Endgame> endgames();
 double value(Endgame);
 
@@ -44,8 +47,8 @@ struct Robot_capabilities{
 
 	auto operator<=>(Robot_capabilities const&)const=default;
 };
-
 std::ostream& operator<<(std::ostream&,Robot_capabilities const&);
+
 Robot_capabilities operator+(Robot_capabilities,Robot_capabilities);
 Robot_capabilities operator/(Robot_capabilities,int);
 

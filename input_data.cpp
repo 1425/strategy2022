@@ -36,6 +36,25 @@ Robot_capabilities operator/(Robot_capabilities a,int i){
 	return a;
 }
 
+
+std::ostream& operator<<(std::ostream& o, Endgame const &a){
+	switch(a){
+		case Endgame::None:
+			return o<<"None";
+		case Endgame::Low:
+			return o<<"Low";
+		case Endgame::Mid:
+			return o<<"Mid";
+		case Endgame::High:
+			return o<<"High";
+		case Endgame::Traversal:
+			return o<<"Traversal";
+		default:
+			assert(0);
+	}
+
+}
+
 std::ostream& operator<<(std::ostream& o,Robot_capabilities const& a){
 	o<<"Robot_capabilities( ";
 	#define X(T,A) o<<""#A<<":"<<a.A<<" ";
