@@ -397,12 +397,26 @@ variant<Picklist,string> make_picklist(Team base_team,map<Team,Robot_capabilitie
 
 	//then, estimate what a third robot would look like
 
-	auto est_third_robots=take(
-		5,
-		skip(min(20,cap.size()-5),first_only)
-	);
+	auto est_third_robots=[&](){
+		if(first_only.size()>5){
+			return take(
+				5,
+				skip(
+					min(20,cap.size()-5),
+					first_only
+				)
+			);
+		}
+		return first_only;
+	}();
 
-	auto generic_third=mean(mapf([&](auto x){ return cap[x.second]; },est_third_robots));
+	auto generic_third=[&](){
+		if(est_third_robots.empty()){
+			//this should only happen if there is only one robot worth of data available.
+			return Robot_capabilities{};
+		}
+		return mean(mapf([&](auto x){ return cap[x.second]; },est_third_robots));
+	}();
 	PRINT(generic_third);
 
 	//then redo the estimate of who's a good first pick
@@ -442,7 +456,7 @@ variant<Picklist,string> make_picklist(Team base_team,map<Team,Robot_capabilitie
 
 struct Args{
 	Team team{1425};
-	string scouting_data_path="data/Alliance.csv";
+	string scouting_data_path="data/orwil_match.csv";
 	string valor_data_path="data/Valor Scout.html";
 	string tba_auth_key_path="../tba/auth_key";
 	string tba_cache_path="../tba/cache.db";
