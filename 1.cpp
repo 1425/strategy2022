@@ -464,6 +464,7 @@ struct Args{
 	bool verbose=0;
 	bool compare=0;
 	std::optional<Team> team_details;
+	std::optional<std::string> pit_scouting_data_path;
 };
 
 Args parse_args(int argc,char **argv){
@@ -512,6 +513,13 @@ Args parse_args(int argc,char **argv){
 			,"Path to scouting data csv",
 			[&](vector<string> v){
 				r.scouting_data_path=v[0];
+			}
+		},
+		{
+			"--pit",{"PATH"},
+			"Path to pit scouting data CSV",
+			[&](vector<string> v){
+				r.pit_scouting_data_path=v[0];
 			}
 		},
 		{
@@ -594,6 +602,10 @@ Args parse_args(int argc,char **argv){
 
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
+
+	if(args.pit_scouting_data_path){
+		return parse_pit_scouting(*args.pit_scouting_data_path);
+	}
 
 	using Caps=map<Team,Robot_capabilities>;
 	vector<pair<string,Caps>> v;

@@ -8,6 +8,50 @@ std::string upper(std::string const& s){
 	return boost::to_upper_copy<std::string>(s);
 }
 
+int parse_pit_scouting(std::string const& path="data/test_pit.csv"){
+	ifstream f(path);
+
+	vector<vector<string>> data;
+	string line;
+	while(getline(f,line)){
+		using namespace boost;
+		tokenizer<escaped_list_separator<char>> t(line);
+		//data|=vector<string>{t.begin(),t.end()};
+		vector<string> v{t.begin(),t.end()};
+		data.push_back(v);
+	}
+
+	if(data.empty()){
+		return 0;
+	}
+	
+	auto headers=data[0];
+
+	//Interesting cols:
+	//NickName
+	//TeamNumber
+
+	auto z=mapf(
+		[=](auto x){ return to_map(zip(headers,x)); },
+		tail(data)
+	);
+	//print_lines(z);
+
+	for(auto h:headers){
+		auto m=mapf([&](auto x){ return x[h];},z);
+		cout<<h<<":"<<count(m)<<"\n";
+	}
+
+	//db_type
+	//db_wheels
+	//db_cims
+	//db_neos
+	//db_falcons
+	//db_others
+
+	return 0;
+}
+
 tba::Alliance_color parse(tba::Alliance_color const*,string const& s){
 	if(s=="red") return tba::Alliance_color::RED;
 	if(s=="blue") return tba::Alliance_color::BLUE;
@@ -118,6 +162,9 @@ void team_details(string const& filename,Team const& team){
 }
 
 map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
+	/*auto x=parse_pit_scouting();
+	PRINT(x);*/
+
 	auto vu=parse_csv_inner(filename,verbose);
 	//things to look at:
 	//how many matches for each team
@@ -169,3 +216,4 @@ map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 		)
 	));
 }
+
