@@ -61,6 +61,10 @@ std::ostream& operator<<(std::ostream& o,Flat_map<K,V> const& a){
 }
 
 template<typename K,typename V>
-std::vector<V> values(Flat_map<K,V> const&)nyi
+std::vector<V> values(Flat_map<K,V> const& v){
+	std::vector<V> r;
+	for(auto p:v) r|=p.second;
+	return r;
+}
 
 #endif
