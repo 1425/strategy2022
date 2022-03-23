@@ -6,6 +6,36 @@
 
 //start generic code
 
+template<typename T,size_t N>
+std::vector<T> to_vec(std::array<T,N> const& a){
+	return std::vector<T>(a.begin(),a.end());
+}
+
+template<size_t N>
+auto join(std::array<std::string,N> const& a){
+	return join(to_vec(a));
+}
+
+template<typename T,size_t N>
+std::array<T,N> reversed(std::array<T,N> a){
+	std::reverse(begin(a),end(a));
+	return a;
+}
+
+template<typename A,typename B,size_t N>
+std::array<B,N> seconds(std::array<std::pair<A,B>,N> const& a){
+	return mapf([](auto x){ return x.second; },a);
+}
+
+template<typename A,typename B,typename C,size_t N>
+std::array<std::tuple<A,B,C>,N> zip(std::array<A,N> const& a,std::array<B,N> const& b,std::array<C,N> const& c){
+	std::array<std::tuple<A,B,C>,N> r;
+	for(auto i:range(N)){
+		r[i]=std::make_tuple(a[i],b[i],c[i]);
+	}
+	return r;
+}
+
 template<typename K,typename V>
 std::map<K,V> operator/(std::map<K,V> m,double d){
 	for(auto &a:m){
@@ -132,12 +162,22 @@ struct Robot_strategy{
 	ROBOT_STRATEGY_ITEMS(INST)
 };
 
+std::ostream& operator<<(std::ostream& o,Robot_strategy const& a){
+	o<<"Robot_strategy(";
+	#define X(A,B) o<<" "#B<<":"<<a.B;
+	ROBOT_STRATEGY_ITEMS(X)
+	#undef X
+	return o<<" )";
+}
+
 #define ROBOT_TELEOP_STRATEGY_ITEMS(X)\
 	X(bool,defend)\
 	X(bool,climb)
 
 struct Robot_teleop_strategy{
 	ROBOT_TELEOP_STRATEGY_ITEMS(INST)
+
+	auto operator<=>(Robot_teleop_strategy const&)const=default;
 };
 
 vector<Robot_teleop_strategy> robot_teleop_strategies(){
@@ -237,9 +277,9 @@ double teleop_score(Alliance_capabilities const& cap,Alliance_teleop_strategy co
 	return r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
 }
 
-double teleop_score(Alliance_capabilities const& a){
+pair<double,Alliance_teleop_strategy> teleop_score(Alliance_capabilities const& a){
 	return max(mapf(
-		[=](auto x){ return teleop_score(a,x); },
+		[=](auto x){ return make_pair(teleop_score(a,x),x); },
 		alliance_teleop_strategies()
 	));
 }
@@ -290,9 +330,9 @@ double points(Alliance_capabilities const& cap,Auto_strategy const& strat){
 	));
 }
 
-double auto_points(Alliance_capabilities const& cap){
+pair<double,Auto_strategy> auto_points(Alliance_capabilities const& cap){
 	return max(mapf(
-		[=](auto x){ return points(cap,x); },
+		[=](auto x){ return make_pair(points(cap,x),x); },
 		auto_strategies()
 	));
 }
@@ -322,8 +362,24 @@ double expected_score(Alliance_capabilities a,Alliance_strategy){
 	return points(sum(a));
 }
 
-double expected_score(Alliance_capabilities a){
-	return auto_points(a)+teleop_score(a);
+pair<double,Alliance_strategy> expected_score(Alliance_capabilities a){
+	//return auto_points(a)+teleop_score(a);
+	auto ap=auto_points(a);
+	auto b=teleop_score(a);
+	return make_pair(
+		ap.first+b.first,
+		mapf(
+			[=](auto x){
+				auto [auto1,tele1]=x;
+				return Robot_strategy{
+					auto1,
+					tele1.defend,
+					tele1.climb
+				};
+			},
+			zip(ap.second,b.second)
+		)
+	);
 }
 
 using Picklist_row=std::tuple<Team,double,std::vector<pair<Team,double>>>;
@@ -385,7 +441,7 @@ variant<Picklist,string> make_picklist(Team base_team,map<Team,Robot_capabilitie
 	auto first_only=reversed(sorted(mapf(
 		[&](auto team){
 			return make_pair(
-				expected_score(Alliance_capabilities{base_cap,cap[team],Robot_capabilities{}}),
+				expected_score(Alliance_capabilities{base_cap,cap[team],Robot_capabilities{}}).first,
 				team
 			);
 		},
@@ -423,7 +479,7 @@ variant<Picklist,string> make_picklist(Team base_team,map<Team,Robot_capabilitie
 	auto first_picks=reversed(sorted(mapf(
 		[&](auto team){
 			return make_pair(
-				expected_score(Alliance_capabilities{base_cap,cap[team],generic_third}),
+				expected_score(Alliance_capabilities{base_cap,cap[team],generic_third}).first,
 				team
 			);
 		},
@@ -431,7 +487,7 @@ variant<Picklist,string> make_picklist(Team base_team,map<Team,Robot_capabilitie
 	)));
 
 	//and then figure our all the second picks from that first pick list.
-	return make_pair(
+	return Picklist(
 		base_team,
 		mapf(
 			[&](auto x){
@@ -441,7 +497,7 @@ variant<Picklist,string> make_picklist(Team base_team,map<Team,Robot_capabilitie
 				auto m=reversed(sorted(mapf(
 					[&](auto x){
 						return make_pair(
-							expected_score(Alliance_capabilities{base_cap,team_cap,cap[x]}),
+							expected_score(Alliance_capabilities{base_cap,team_cap,cap[x]}).first,
 							x
 						);
 					},
@@ -614,6 +670,90 @@ Args parse_args(int argc,char **argv){
 	return r;
 }
 
+template<size_t N>
+std::string join(std::string const& delim,std::array<std::string,N> const& a){
+	if(N==0) return "";
+
+	std::stringstream ss;
+	ss<<a[0];
+	for(auto i:range(size_t(1),N)){
+		ss<<delim<<a[i];
+	}
+	return ss.str();
+}
+
+int match_strategy(std::array<Team,3> const& teams,map<Team,Robot_capabilities> const& m){
+	assert(teams.size()==3);
+	auto cap=mapf(
+		[=](auto x){
+			auto f=m.find(x);
+			if(f==m.end()){
+				cerr<<"Could not find team:"<<x<<"\n";
+				exit(1);
+			}
+			return f->second;
+		},
+		teams
+	);
+	auto x=expected_score(cap);
+
+	auto climb_priority=seconds(reversed(sorted(mapf(
+		[](auto x){
+			auto [team,cap1]=x;
+			return make_pair(points(cap1.endgame),team);
+		},
+		zip(teams,cap)
+	))));
+
+	cout<<"Expected net score:"<<x.first<<"\n";
+	for(auto [team,strat,cap1]:zip(teams,x.second,cap)){
+		cout<<team<<"\t"<<strat<<"\t"<<cap1<<"\n";
+	}
+
+	PRINT(climb_priority);
+
+	auto title1="Match strategy for "+join("-",MAP(as_string,teams));
+	auto h=html(
+		head(title(title1))+
+		body(
+			h1(title1)+
+			p("Expected net score:"+as_string(x.first))+
+			tag(
+				"table border",
+				tr(
+					th("Team")+
+					th("Starting location")+
+					th("Defend")+
+					th("Climb")+
+					th("Capabilities")
+				)+
+				join(mapf(
+					[](auto x){
+						auto [team,strat1,cap1]=x;
+						return tr(
+							td(team)+
+							td(strat1.starting_location)+
+							td(strat1.defend)+
+							td(strat1.climb)+
+							td(cap1)
+						);
+					},
+					zip(teams,x.second,cap)
+				))
+			)
+		)
+	);
+	auto filename="match_strategy.html";
+	write_file(filename,h);
+
+	#ifdef __linux__
+	return system( (string()+"firefox "+filename).c_str() );
+	#else
+	cout<<"See results in "<<filename<<"\n";
+	return 0;
+	#endif
+}
+
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
 
@@ -657,6 +797,10 @@ int main(int argc,char **argv){
 	if(args.team_details){
 		team_details(args.scouting_data_path,*args.team_details);
 		return 0;
+	}
+
+	if(args.team_list){
+		return match_strategy(*args.team_list,v[0].second);
 	}
 
 	if(args.compare){

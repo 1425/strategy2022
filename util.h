@@ -296,6 +296,9 @@ auto h2(T a){ return tag("h2",a); }
 template<typename T>
 auto small(T a){ return tag("small",a); }
 
+template<typename T>
+auto p(T a){ return tag("p",a); }
+
 std::string join(std::vector<std::string> const&);
 std::string join(std::string const&,std::vector<std::string> const&);
 std::vector<bool> bools();
