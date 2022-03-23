@@ -188,12 +188,31 @@ map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 						[](auto x){ return x.start_position; },
 						data
 					);
-					return Auto{map_values(
-						[](auto data){
-							return mean_d(ITEMS(taxi))*2+mean_d(ITEMS(auto_high))*4+mean_d(ITEMS(auto_low))*2;
+
+					//how many taxi points get at the worst spot they've tried
+					auto worst_taxi_pos_value=[&]()->double{
+						if(g.empty()) return 0;
+						return min(mapf(
+							[](auto data){ return mean_d(ITEMS(taxi)); },
+							values(g)
+						));
+					}();
+
+					return Auto{to_map(mapf(
+						[=](auto loc){
+							auto f=g.find(loc);
+							if(f==g.end()){
+								//if never tried a location, assume that they can at least do taxi from there how they do somewhere else
+								return make_pair(loc,worst_taxi_pos_value);
+							}
+							auto data=f->second;
+							return make_pair(
+								loc,
+								mean_d(ITEMS(taxi))*2+mean_d(ITEMS(auto_high))*4+mean_d(ITEMS(auto_low))*2
+							);
 						},
-						g
-					)};
+						options((Starting_location*)0)
+					))};
 				}(),
 				//tele_ball_pts
 				mean_d(ITEMS(tele_high))*2+mean_d(ITEMS(tele_low)),
