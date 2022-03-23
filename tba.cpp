@@ -76,6 +76,8 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 		auto s=*m;
 		if(!std::holds_alternative<tba::Match_Score_Breakdown_2022>(s)){
 			PRINT(match.key);
+			PRINT(s);
+			nyi
 		} else{
 			auto scores=std::get<tba::Match_Score_Breakdown_2022>(s);
 			process_alliance(match.alliances.red,scores.red);

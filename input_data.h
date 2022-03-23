@@ -10,9 +10,9 @@ using Team=Int_limited<1,10*1000>;
 
 using Endgame=tba::Endgame_2022;
 
-#ifdef __CYGWIN__
-std::ostream& operator<<(std::ostream&,Endgame const&);
-#endif
+//#ifdef __CYGWIN__
+//std::ostream& operator<<(std::ostream&,Endgame const&);
+//#endif
 
 std::vector<Endgame> endgames();
 double value(Endgame);

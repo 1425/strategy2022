@@ -36,7 +36,7 @@ Robot_capabilities operator/(Robot_capabilities a,int i){
 	return a;
 }
 
-#ifdef __CYGWIN__
+/*#ifdef __CYGWIN__
 std::ostream& operator<<(std::ostream& o, Endgame const &a){
 	switch(a){
 		case Endgame::None:
@@ -54,7 +54,7 @@ std::ostream& operator<<(std::ostream& o, Endgame const &a){
 	}
 }
 #endif
-
+*/
 std::ostream& operator<<(std::ostream& o,Robot_capabilities const& a){
 	o<<"Robot_capabilities( ";
 	#define X(T,A) o<<""#A<<":"<<a.A<<" ";

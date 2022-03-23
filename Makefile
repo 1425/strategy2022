@@ -1,4 +1,4 @@
-CXXFLAGS=-std=c++20 -Wall -Wextra -Werror -Ofast -flto -march=native
+CXXFLAGS=-std=c++20 -Wall -Wextra -Werror
 
 all: 1
 

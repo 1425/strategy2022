@@ -465,6 +465,7 @@ struct Args{
 	bool compare=0;
 	std::optional<Team> team_details;
 	std::optional<std::string> pit_scouting_data_path;
+	std::optional<std::array<Team, 3>> team_list; 
 };
 
 Args parse_args(int argc,char **argv){
@@ -552,6 +553,19 @@ Args parse_args(int argc,char **argv){
 			"Event key to use to look up data from The Blue Alliance",
 			[&](vector<string> v){
 				r.event_key=tba::Event_key{v[0]};
+			}
+		},
+		{
+			"--match_strategy",
+			{"TEAM1", "TEAM2", "TEAM3"},
+			"Determines strategy for a match given teams on alliance",
+			[&](vector<string> v){
+				r.team_list=std::array<Team,3>{
+					Team{stoi(v[0])},
+					Team{stoi(v[1])},
+					Team{stoi(v[2])}
+					
+				};
 			}
 		}
 	};
@@ -696,3 +710,4 @@ int main(int argc,char **argv){
 			assert(0);
 	}
 }
+
