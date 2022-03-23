@@ -7,6 +7,30 @@
 //start generic code
 
 template<typename T,size_t N>
+std::set<T> to_set(std::array<T,N> const& a){
+	return std::set<T>(a.begin(),a.end());
+}
+
+template<size_t X,typename T,size_t N>
+std::array<T,X> take(std::array<T,N> const& a){
+	assert(X<=N);
+	std::array<T,X> r;
+	for(auto i:range_st<X>()){
+		r[i]=a[i];
+	}
+	return r;
+}
+
+template<size_t X,typename T,size_t N>
+std::array<T,N-X> skip(std::array<T,N> const& a){
+	std::array<T,N-X> r;
+	for(auto i:range_st<N-X>()){
+		r[i]=a[i+X];
+	}
+	return r;
+}
+
+template<typename T,size_t N>
 std::vector<T> to_vec(std::array<T,N> const& a){
 	return std::vector<T>(a.begin(),a.end());
 }
@@ -14,6 +38,18 @@ std::vector<T> to_vec(std::array<T,N> const& a){
 template<size_t N>
 auto join(std::array<std::string,N> const& a){
 	return join(to_vec(a));
+}
+
+template<typename T,size_t N>
+std::string join(std::string const& delim,std::array<T,N> const& a){
+	if(N==0) return "";
+
+	std::stringstream ss;
+	ss<<a[0];
+	for(auto i:range(size_t(1),N)){
+		ss<<delim<<a[i];
+	}
+	return ss.str();
 }
 
 template<typename T,size_t N>
@@ -522,6 +558,7 @@ struct Args{
 	std::optional<Team> team_details;
 	std::optional<std::string> pit_scouting_data_path;
 	std::optional<std::array<Team, 3>> team_list; 
+	std::optional<std::array<Team,6>> match6;
 };
 
 Args parse_args(int argc,char **argv){
@@ -623,6 +660,24 @@ Args parse_args(int argc,char **argv){
 					
 				};
 			}
+		},
+		{
+			"--match6",
+			{"RED1","RED2","RED3","BLUE1","BLUE2","BLUE3"},
+			"Look at in-match strategy for a whole match",
+			[&](vector<string> v){
+				r.match6=mapf(
+					[=](auto i){
+						try{
+							return Team{stoi(v[i])};
+						}catch(...){
+							cerr<<"Error: Could not parse team number.\n";
+							exit(1);
+						}
+					},
+					range_st<6>()
+				);
+			}
 		}
 	};
 	flags|=Flag{
@@ -670,16 +725,13 @@ Args parse_args(int argc,char **argv){
 	return r;
 }
 
-template<size_t N>
-std::string join(std::string const& delim,std::array<std::string,N> const& a){
-	if(N==0) return "";
-
-	std::stringstream ss;
-	ss<<a[0];
-	for(auto i:range(size_t(1),N)){
-		ss<<delim<<a[i];
-	}
-	return ss.str();
+int show_html(std::string const& path){
+	#ifdef __linux__
+	return system( (string()+"firefox "+path).c_str() );
+	#else
+	cout<<"See results in "<<path<<"\n";
+	return 0;
+	#endif
 }
 
 int match_strategy(std::array<Team,3> const& teams,map<Team,Robot_capabilities> const& m){
@@ -745,13 +797,125 @@ int match_strategy(std::array<Team,3> const& teams,map<Team,Robot_capabilities> 
 	);
 	auto filename="match_strategy.html";
 	write_file(filename,h);
+	return show_html(filename);
+}
 
-	#ifdef __linux__
-	return system( (string()+"firefox "+filename).c_str() );
-	#else
-	cout<<"See results in "<<filename<<"\n";
-	return 0;
-	#endif
+int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m){
+	if(to_set(teams).size()!=6){
+		cout<<"Warning: Duplicate teams.\n";
+	}
+	auto red=take<3>(teams);
+	auto blue=skip<3>(teams);
+
+	auto caps=[=](auto alliance){
+		return mapf(
+			[=](auto team){
+				auto f=m.find(team);
+				if(f==m.end()){
+					cerr<<"Error: Could not find "<<team<<"\n";
+					exit(1);
+				}
+				return f->second;
+			},
+			alliance
+		);
+	};
+	auto red_cap=caps(red);
+	auto blue_cap=caps(blue);
+
+	auto red_exp=expected_score(red_cap);
+	auto blue_exp=expected_score(blue_cap);
+
+	auto show_alliance=[&](
+		std::string color,
+		std::array<Team,3> const& teams,
+		Alliance_capabilities const& cap,
+		pair<double,Alliance_strategy> const& exp
+	){
+		cout<<color<<" alliance:\n";
+		auto expected_points=exp.first;
+		PRINT(expected_points);
+		for(auto z:zip(teams,cap,exp.second)){
+			auto [team,cap1,strat]=z;
+			cout<<team<<"\t"<<strat<<"\t"<<cap1<<"\n";
+		}
+	};
+
+	show_alliance("Red",red,red_cap,red_exp);
+	show_alliance("Blue",blue,blue_cap,blue_exp);
+
+	auto title1="Match strategy "+join("-",red)+" vs "+join("-",blue);
+
+	auto half=[&](auto f,auto alliance_data){
+		return join(mapf(
+			[=](auto x){ return td(f(x)); },
+			alliance_data
+		));
+	};
+
+	auto whole=[&](string name,auto f){
+		return tr(half(f,red_exp.second)+th(name)+half(f,blue_exp.second));
+	};
+
+	auto wcap=[&](string name,auto f){
+		return tr(half(f,red_cap)+th(name)+half(f,blue_cap));
+	};
+
+	auto auto_item=[&](Starting_location s){
+		return wcap(
+			"Auto start "+as_string(s),
+			[=](auto x)->string{
+				auto m=x.auto_pts;
+				auto f=m.find(s);
+				if(f==m.end()){
+					return "-";
+				}
+				return round2(f->second);
+			}
+		);
+	};
+
+	auto h=html(
+		head(title(title1))+
+		body(
+			h1(title1)+
+			tag(
+				"table border",
+				tr(
+					tag("th colspan=3","Red")+
+					td("")+
+					tag("th colspan=3","Blue")
+				)+
+				tr(
+					tag("td colspan=3 align=center",round2(red_exp.first))+
+					th("Expected net score")+
+					tag("td colspan=3 align=center",round2(blue_exp.first))
+				)+
+				tr(
+					join(MAP(th,red))+th("Team")+join(MAP(th,blue))
+				)+
+				tr(
+					tag("th colspan=7","Recommended strategy")
+				)+
+				whole("Starting location",[](auto x){ return x.starting_location; })+
+				whole("Defend",[](auto x){ return x.defend; })+
+				whole("Climb",[](auto x){ return x.climb; })+
+				tr(tag("th colspan=7","Capabilities"))+
+				//wcap("Auto",[](auto x){ return x.auto_pts; })+
+				join(mapf(auto_item,options((Starting_location*)0)))+
+				wcap("Tele ball pts",[](auto x){ return round2(x.tele_ball_pts); })+
+				//wcap("Endgame",[](auto x){ return x.endgame; })
+				wcap("Endgame Traversal",[](auto x){ return round2(x.endgame[Endgame::Traversal]); })+
+				wcap("Endgame High",[](auto x){ return round2(x.endgame[Endgame::High]); })+
+				wcap("Endgame Mid",[](auto x){ return round2(x.endgame[Endgame::Mid]); })+
+				wcap("Endgame Low",[](auto x){ return round2(x.endgame[Endgame::Low]); })+
+				wcap("Endgame None",[](auto x){ return round2(x.endgame[Endgame::None]); })
+			)
+		)
+	);
+	auto filename="match6.html";
+	write_file(filename,h);
+	return show_html(filename);
 }
 
 int main(int argc,char **argv){
@@ -801,6 +965,10 @@ int main(int argc,char **argv){
 
 	if(args.team_list){
 		return match_strategy(*args.team_list,v[0].second);
+	}
+
+	if(args.match6){
+		return match6(*args.match6,v[0].second);
 	}
 
 	if(args.compare){
