@@ -113,7 +113,8 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 						r[x]=(0.0+e.count(x))/e.size();
 					}
 					return r;
-				}()
+				}(),
+				30
 			});
 		},
 		keys(taxi_by_team)

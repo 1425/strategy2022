@@ -113,7 +113,8 @@ map<Team,Robot_capabilities> parse(string s){
 						};
 					}
 					return Endgame_px{{Endgame::Traversal,1}};
-				}()
+				}(),
+				30
 			}
 		);
 	};

@@ -306,8 +306,21 @@ double teleop_score(Alliance_capabilities const& cap,Alliance_teleop_strategy co
 	for(auto [cap1,strat1]:zip(cap,strat)){
 		if(strat1.defend){
 			r+=defense_values[defenders++];
+			if(cap1.climb_time<20 || !strat1.climb){
+				//assume can do 1 extra pt of defense if fast climb
+				//or not going to climb.
+				r++;
+			}
 		}else{
-			r+=cap1.tele_ball_pts;
+			auto time_multiplier=[=](){
+				static const double TELEOP_TIME=60*2+15;
+				static const auto NOT_END=TELEOP_TIME-30;
+				if(strat1.climb){
+					return (TELEOP_TIME-cap1.climb_time)/NOT_END;
+				}
+				return TELEOP_TIME/NOT_END;
+			}();
+			r+=cap1.tele_ball_pts*time_multiplier;
 		}
 	}
 	return r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
@@ -909,7 +922,8 @@ int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m
 				wcap("Endgame High",[](auto x){ return round2(x.endgame[Endgame::High]); })+
 				wcap("Endgame Mid",[](auto x){ return round2(x.endgame[Endgame::Mid]); })+
 				wcap("Endgame Low",[](auto x){ return round2(x.endgame[Endgame::Low]); })+
-				wcap("Endgame None",[](auto x){ return round2(x.endgame[Endgame::None]); })
+				wcap("Endgame None",[](auto x){ return round2(x.endgame[Endgame::None]); })+
+				wcap("Climb time",[](auto x){ return round2(x.climb_time); })
 			)
 		)
 	);
