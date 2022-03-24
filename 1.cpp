@@ -305,11 +305,14 @@ double teleop_score(Alliance_capabilities const& cap,Alliance_teleop_strategy co
 	double r=0;
 	for(auto [cap1,strat1]:zip(cap,strat)){
 		if(strat1.defend){
-			r+=defense_values[defenders++];
-			if(cap1.climb_time<20 || !strat1.climb){
-				//assume can do 1 extra pt of defense if fast climb
-				//or not going to climb.
-				r++;
+			if(cap1.defense_okay){
+				r+=defense_values[defenders++];
+				if(cap1.climb_time<20 || !strat1.climb){
+					//assume can do 0 extra pt of defense if fast climb
+					//or not going to climb.
+					r++;
+				}
+				
 			}
 		}else{
 			auto time_multiplier=[=](){
@@ -742,7 +745,8 @@ int show_html(std::string const& path){
 	#ifdef __linux__
 	return system( (string()+"firefox "+path).c_str() );
 	#else
-	cout<<"See results in "<<path<<"\n";
+	cout<<"See results in "<< path <<"\n";
+	return system( (string()+"\"/cygdrive/C/Program Files (x86)/Microsoft/Edge/Application/msedge.exe\" file://C:/cygwin64/home/ahgos/strategy2022/"+path).c_str() );
 	return 0;
 	#endif
 }
@@ -943,6 +947,10 @@ int main(int argc,char **argv){
 	vector<pair<string,Caps>> v;
 
 	v|=make_pair("scouted",parse_csv(args.scouting_data_path));
+	vector<Team> no_defense {Team(1425), Team(753)};
+	for (auto team: no_defense){
+		v[0].second[team].defense_okay = 0;
+	}
 
 	{
 		auto p1=from_tba(args.tba_auth_key_path,args.tba_cache_path,args.event_key);

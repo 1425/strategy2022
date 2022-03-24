@@ -114,7 +114,8 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 					}
 					return r;
 				}(),
-				30
+				30,
+				1
 			});
 		},
 		keys(taxi_by_team)

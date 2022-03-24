@@ -248,7 +248,7 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 			}
 			if(v.empty()) return 30;
 			return mean(v);
-		}()
+		}(), 1
 		#undef ITEMS
 	};
 }

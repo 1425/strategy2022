@@ -30,7 +30,8 @@ using Auto=Flat_map<Starting_location,double>;
 	X(Auto,auto_pts)\
 	X(double,tele_ball_pts)\
 	X(Endgame_px,endgame)\
-	X(double,climb_time)
+	X(double,climb_time)\
+	X(bool, defense_okay)
 
 struct Robot_capabilities{
 	//auto
