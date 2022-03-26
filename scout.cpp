@@ -146,11 +146,14 @@ vector<Useful_data> parse_csv_inner(std::string const& filename,bool verbose){
 		}
 		USEFUL_ITEMS(X)
 		#undef X
+		if(u.team==1425 && u.match==13) u.start_position=Starting_location{3};
+		if(u.team==2811 && u.match==25) u.start_position=Starting_location{3};
+		if(u.team==753 && u.match==29) u.auto_high=1;
+		if(u.team==4488 && u.match==29) u.auto_high=1;
+		if(u.team==7034 && u.match==29) u.auto_high=2;
 		if(bad.empty()){
 			vu|=u;
 		}
-		if(u.team==1425 && u.match==13) u.start_position=Starting_location{3};
-		if(u.team==2811 && u.match==25) u.start_position=Starting_location{3};
 	}
 	cout<<"Good rows:"<<vu.size()<<" ("<<vu.size()/6.0<<" matches)\n";
 
