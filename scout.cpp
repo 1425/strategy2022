@@ -188,7 +188,7 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 				));
 			}();
 
-			return Auto{to_map(mapf(
+			Auto a{to_map(mapf(
 				[=](auto loc){
 					auto f=g.find(loc);
 					if(f==g.end()){
@@ -203,6 +203,11 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 				},
 				options((Starting_location*)0)
 			))};
+			auto best=max(values(a));
+			for(auto &x:a){
+				x.second=max(x.second,best/2);
+			}
+			return a;
 		}(),
 		//tele_ball_pts
 		[=](){
