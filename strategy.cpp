@@ -110,11 +110,11 @@ double climb_score(Alliance_capabilities const& a,bool c0,bool c1,bool c2){
 		mark(target);
 		auto left=sum(values(f));
 		assert(left>0);
-		cout<<"end "<<endgame_px<<"\t"<<left<<"\n";
+		//cout<<"end "<<endgame_px<<"\t"<<left<<"\n";
 		//PRINT(endgame_px/left);
 		total+=points(endgame_px);
 	}
-	cout<<"climb:"<<total<<"\n";
+	//cout<<"climb:"<<total<<"\n";
 	return total;
 }
 
@@ -145,7 +145,7 @@ double teleop_score(Alliance_capabilities const& cap,Alliance_teleop_strategy co
 			r+=cap1.tele_ball_pts*time_multiplier;
 		}
 	}
-	PRINT(r);
+	//PRINT(r);
 	return 0.9*r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
 }
 
@@ -235,9 +235,9 @@ double expected_score(Alliance_capabilities a,Alliance_strategy){
 pair<double,Alliance_strategy> expected_score(Alliance_capabilities const& a){
 	//return auto_points(a)+teleop_score(a);
 	auto ap=auto_points(a);
-	PRINT(ap);
+	//PRINT(ap);
 	auto b=teleop_score(a);
-	PRINT(b);
+	//PRINT(b);
 	return make_pair(
 		ap.first+b.first,
 		mapf(

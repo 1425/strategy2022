@@ -497,7 +497,7 @@ int main(int argc,char **argv){
 	using Caps=map<Team,Robot_capabilities>;
 	vector<pair<string,Caps>> v;
 
-	v|=make_pair("scouted",parse_csv(args.scouting_data_path));
+	v|=make_pair("scouted",parse_csv(args.scouting_data_path,args.verbose));
 	vector<Team> no_defense {Team{3812}, Team{1432}};
 	for (auto team: no_defense){
 		v[0].second[team].defense_okay = 0;

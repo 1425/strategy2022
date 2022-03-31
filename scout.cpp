@@ -1,10 +1,21 @@
 #include "scout.h"
 #include<fstream>
+#include<cmath>
 #include<boost/tokenizer.hpp>
 #include<boost/algorithm/string.hpp>
 #include "map.h"
 
 using namespace std;
+
+template<typename A,typename B>
+std::vector<B> seconds(std::vector<tuple<A,B>> const&){
+	nyi
+}
+
+template<typename A,typename B>
+std::ostream& operator<<(std::ostream& o,std::tuple<A,B> const& a){
+	return o<<"("<<get<0>(a)<<","<<get<1>(a)<<")";
+}
 
 std::string upper(std::string const& s){
 	return boost::to_upper_copy<std::string>(s);
@@ -148,11 +159,11 @@ vector<Useful_data> parse_csv_inner(std::string const& filename,bool verbose){
 		}
 		USEFUL_ITEMS(X)
 		#undef X
-		if(u.team==1425 && u.match==13) u.start_position=Starting_location{3};
+		/*if(u.team==1425 && u.match==13) u.start_position=Starting_location{3};
 		if(u.team==2811 && u.match==25) u.start_position=Starting_location{3};
 		if(u.team==753 && u.match==29) u.auto_high=1;
 		if(u.team==4488 && u.match==29) u.auto_high=1;
-		if(u.team==7034 && u.match==29) u.auto_high=2;
+		if(u.team==7034 && u.match==29) u.auto_high=2;*/
 		if(bad.empty()){
 			vu|=u;
 		}
@@ -265,11 +276,137 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 	};
 }
 
+using Match=int;
+
+template<typename A,typename B,typename C>
+vector<C> thirds(vector<std::tuple<A,B,C>> const& v){
+	return mapf([](auto x){ return get<2>(x); },v);
+}
+
+double std_dev(std::vector<double> const& v){
+	auto u=mean(v);
+	return sqrt(mean(mapf(
+		[u](auto x){ return pow(x-u,2); },
+		v
+	)));
+}
+
+//tuple(type name,Team,Match,value,z-score)
+void outliers(std::string const& name,vector<tuple<Team,Match,double>> v){
+	if(v.empty()) return;
+
+	if(name=="climbtime"){
+		//0 means no data for climb time.
+		v=filter([](auto x){ return get<2>(x); },v);
+	}
+	auto values=thirds(v);
+	auto mu=mean(values);
+	auto sigma=std_dev(values);
+
+	bool shown=0;
+	auto show=[&](){
+		if(!shown){
+			shown=1;
+			PRINT(name);
+			PRINT(mu);
+			PRINT(sigma);
+		}
+	};
+	//auto m=reversed(sorted(mapf([=](auto x){ return fabs(x-mu)/sigma; },values)));
+	//print_lines(m);
+	auto z=[=](auto value){
+		return (value-mu)/sigma;
+	};
+
+	for(auto [team,match,value]:v){
+		auto z1=z(value);
+		if(fabs(z1)>3){
+			show();
+			cout<<name<<"\t"<<team<<"\t"<<match<<"\t"<<value<<"\t"<<z1<<"\n";
+		}
+	}
+
+	for(auto [team,data]:group([](auto x){ return get<0>(x); },v)){
+		auto values=thirds(data);
+		auto mu=mean(values);
+		auto sigma=std_dev(values);
+		auto z=[&](auto value){
+			return (value-mu)/sigma;
+		};
+		for(auto [team,match,value]:data){
+			auto z1=z(value);
+			if(fabs(z1)>3){
+				cout<<"pt:"<<team<<values<<"\t"<<match<<"\t"<<value<<"\t"<<z1<<"\n";
+			}
+		}
+	}
+}
+
+template<int A,int B>
+void outliers(std::string const& name,std::vector<tuple<Team,Match,Int_limited<A,B>>> const& v){
+	return outliers(name,mapf(
+		[](auto x){ return make_tuple(get<0>(x),get<1>(x),double(get<2>(x))); },
+		v
+	));
+}
+
+void outliers(std::string const& name,std::vector<tuple<Team,Match,int>> const& v){
+	return outliers(name,mapf(
+		[](auto x){ return make_tuple(get<0>(x),get<1>(x),double(get<2>(x))); },
+		v
+	));
+}
+
+void outliers(std::string const& name,std::vector<tuple<Team,Match,unsigned>> const& v){
+	return outliers(name,mapf(
+		[](auto x){ return make_tuple(get<0>(x),get<1>(x),double(get<2>(x))); },
+		v
+	));
+}
+
+void outliers(std::string const& name,std::vector<tuple<Team,Match,tba::Endgame_2022>> const& v){
+	return outliers(name,mapf(
+		[](auto x){ return make_tuple(get<0>(x),get<1>(x),double(get<2>(x))); },
+		v
+	));
+}
+
+void outliers(std::string const& name,std::vector<tuple<Team,Match,tba::Alliance_color>> const& v){
+	//this one is a little silly to exist.
+	return outliers(name,mapf(
+		[](auto x){ return make_tuple(get<0>(x),get<1>(x),double(get<2>(x))); },
+		v
+	));
+}
+
+void outliers(std::string const& name,std::vector<tuple<Team,Match,bool>> const& v){
+	return outliers(name,mapf(
+		[](auto x){ return make_tuple(get<0>(x),get<1>(x),double(get<2>(x))); },
+		v
+	));
+}
+
+template<typename T>
+void outliers(std::string const& name,vector<tuple<Team,Match,T>> const& v){
+	if(v.empty()) return;
+	(void)name;
+	cout<<typeid(T).name()<<"\n";
+	//PRINT(v);
+	nyi
+}
+
+void outliers(vector<Useful_data> const& v){
+	#define X(A,B,C) outliers(""#B,mapf([](auto x){ return make_tuple(x.team,x.match,x.B); },v));
+	USEFUL_ITEMS(X)
+	#undef X
+}
+
 map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 	/*auto x=parse_pit_scouting();
 	PRINT(x);*/
 
 	auto vu=parse_csv_inner(filename,verbose);
+	if(verbose) outliers(vu);
 	//things to look at:
 	//how many matches for each team
 	//set of teams is different in the same match
