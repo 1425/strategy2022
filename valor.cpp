@@ -6,6 +6,7 @@
 #include<sstream>
 #include<boost/tokenizer.hpp>
 #include "util.h"
+#include "map.h"
 
 using namespace std;
 

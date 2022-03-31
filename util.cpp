@@ -1,5 +1,7 @@
 #include "util.h"
 #include<cmath>
+#include<fstream>
+#include<climits>
 
 std::vector<int> range(unsigned lim){
 	std::vector<int> r(lim);

@@ -5,11 +5,13 @@
 #include<vector>
 #include<set>
 #include<cmath>
-#include "qr_solve.hpp"
-#include "input_data.h"
+#include<fstream>
 #include "../tba/tba.h"
 #include "../tba/db.h"
 #include "../tba/data.h"
+#include "qr_solve.hpp"
+#include "input_data.h"
+#include "map.h"
 
 using namespace std;
 

@@ -1,8 +1,10 @@
 #include "tba.h"
+#include<fstream>
 #include "../tba/data.h"
 #include "../tba/db.h"
 #include "../tba/tba.h"
 #include "opr.h"
+#include "map.h"
 
 using namespace std;
 

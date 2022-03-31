@@ -1,6 +1,8 @@
 #include "scout.h"
+#include<fstream>
 #include<boost/tokenizer.hpp>
 #include<boost/algorithm/string.hpp>
+#include "map.h"
 
 using namespace std;
 

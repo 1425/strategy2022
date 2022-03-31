@@ -1,133 +1,13 @@
 #include<set>
 #include<iomanip>
+#include<functional>
 #include "valor.h"
 #include "tba.h"
 #include "scout.h"
+#include "map.h"
+#include "array.h"
 
 //start generic code
-
-template<typename T,size_t N>
-std::set<T> to_set(std::array<T,N> const& a){
-	return std::set<T>(a.begin(),a.end());
-}
-
-template<size_t X,typename T,size_t N>
-std::array<T,X> take(std::array<T,N> const& a){
-	assert(X<=N);
-	std::array<T,X> r;
-	for(auto i:range_st<X>()){
-		r[i]=a[i];
-	}
-	return r;
-}
-
-template<size_t X,typename T,size_t N>
-std::array<T,N-X> skip(std::array<T,N> const& a){
-	std::array<T,N-X> r;
-	for(auto i:range_st<N-X>()){
-		r[i]=a[i+X];
-	}
-	return r;
-}
-
-template<typename T,size_t N>
-std::vector<T> to_vec(std::array<T,N> const& a){
-	return std::vector<T>(a.begin(),a.end());
-}
-
-template<size_t N>
-auto join(std::array<std::string,N> const& a){
-	return join(to_vec(a));
-}
-
-template<typename T,size_t N>
-std::string join(std::string const& delim,std::array<T,N> const& a){
-	if(N==0) return "";
-
-	std::stringstream ss;
-	ss<<a[0];
-	for(auto i:range(size_t(1),N)){
-		ss<<delim<<a[i];
-	}
-	return ss.str();
-}
-
-template<typename T,size_t N>
-std::array<T,N> reversed(std::array<T,N> a){
-	std::reverse(begin(a),end(a));
-	return a;
-}
-
-template<typename A,typename B,size_t N>
-std::array<B,N> seconds(std::array<std::pair<A,B>,N> const& a){
-	return mapf([](auto x){ return x.second; },a);
-}
-
-template<typename A,typename B,typename C,size_t N>
-std::array<std::tuple<A,B,C>,N> zip(std::array<A,N> const& a,std::array<B,N> const& b,std::array<C,N> const& c){
-	std::array<std::tuple<A,B,C>,N> r;
-	for(auto i:range(N)){
-		r[i]=std::make_tuple(a[i],b[i],c[i]);
-	}
-	return r;
-}
-
-template<typename K,typename V>
-std::map<K,V> operator/(std::map<K,V> m,double d){
-	for(auto &a:m){
-		a.second/=d;
-	}
-	return m;
-}
-
-template<typename T>
-std::set<T>& operator|=(std::set<T>& a,std::set<T> const& b){
-	a.insert(b.begin(),b.end());
-	return a;
-}
-
-template<typename T>
-auto or_all(std::vector<T> const& v){
-	T r{};
-	for(auto elem:v){
-		r|=elem;
-	}
-	return r;
-}
-
-template<typename T>
-std::set<T> operator-(std::set<T> a,T t){
-	a.erase(t);
-	return a;
-}
-
-template<typename T>
-std::set<T> operator-(std::set<T> a,std::set<T> const& b){
-	a-=b;
-	return a;
-}
-
-template<typename T>
-std::set<T> operator&(std::set<T> const& a,std::set<T> const& b){
-	std::set<T> r;
-	set_intersection(
-		a.begin(),a.end(),
-		b.begin(),b.end(),
-		std::inserter(r,r.begin())
-	);
-	return r;
-}
-
-template<typename A,typename B,typename C>
-bool operator<(std::tuple<A,B,C> const& a,std::tuple<A,B,C> const& b){
-	if(std::get<0>(a)<std::get<0>(b)) return 1;
-	if(std::get<0>(b)<std::get<0>(a)) return 0;
-
-	if(std::get<1>(a)<std::get<1>(b)) return 1;
-	if(std::get<1>(b)<std::get<1>(a)) return 0;
-	
-	return std::get<2>(a)<std::get<2>(b);
-}
 
 //start program-specific code
 
@@ -338,7 +218,7 @@ double teleop_score(Alliance_capabilities const& cap,Alliance_teleop_strategy co
 		}
 	}
 	PRINT(r);
-	return r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
+	return 0.9*r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
 }
 
 pair<double,Alliance_teleop_strategy> teleop_score(Alliance_capabilities const& a){
