@@ -9,4 +9,11 @@ std::variant<std::map<Team,Robot_capabilities>,std::string> from_tba(
 	tba::Event_key const&
 );
 
+void team_details(
+	std::string const&,
+	std::string const&,
+	tba::Event_key const&,
+	Team const&
+);
+
 #endif

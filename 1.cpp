@@ -486,6 +486,49 @@ int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m
 	write_file(filename,h);
 	return show_html(filename);
 }
+		
+using Caps=map<Team,Robot_capabilities>;
+
+void compare_inner(vector<pair<string,Caps>> const& v){
+	using Source=string;
+	vector<tuple<double,Team,map<Source,Robot_capabilities>>> diff;
+	auto k=or_all(mapf([](auto x){ return keys(x.second); },v));
+		
+	for(auto team:k){
+		map<string,Robot_capabilities> caps;
+		for(auto [source,data]:v){
+			auto f=data.find(team);
+			if(f!=data.end()){
+				caps[source]=f->second;
+			}
+		}
+		auto pts=mapf([](auto x){ return points(x); },values(caps));
+		diff|=make_tuple(max(pts)-min(pts),team,caps);
+	}
+	auto x=take(5,reversed(sorted(diff)));
+	for(auto [a,b,c]:x){
+		cout<<a<<"\t"<<b<<"\n";
+		//cout<<"\t"<<c<<"\n";
+		for(auto [source,cap]:c){
+			cout<<"\t"<<source<<"\t"<<points(cap)<<"\t"<<cap<<"\n";
+		}
+	}
+}
+
+void compare(vector<pair<string,Caps>> v){
+	compare_inner(v);
+
+	cout<<"Climb-only comparison\n";
+	for(auto &x:v){
+		auto& [source,caps]=x;
+		for(auto &elem:caps){
+			auto& [k,v]=elem;
+			v.auto_pts.clear();
+			v.tele_ball_pts=0;
+		}
+	}
+	compare_inner(v);
+}
 
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
@@ -494,7 +537,6 @@ int main(int argc,char **argv){
 		return parse_pit_scouting(*args.pit_scouting_data_path);
 	}
 
-	using Caps=map<Team,Robot_capabilities>;
 	vector<pair<string,Caps>> v;
 
 	v|=make_pair("scouted",parse_csv(args.scouting_data_path,args.verbose));
@@ -545,29 +587,7 @@ int main(int argc,char **argv){
 	}
 
 	if(args.compare){
-		using Source=string;
-		vector<tuple<double,Team,map<Source,Robot_capabilities>>> diff;
-		auto k=or_all(mapf([](auto x){ return keys(x.second); },v));
-		
-		for(auto team:k){
-			map<string,Robot_capabilities> caps;
-			for(auto [source,data]:v){
-				auto f=data.find(team);
-				if(f!=data.end()){
-					caps[source]=f->second;
-				}
-			}
-			auto pts=mapf([](auto x){ return points(x); },values(caps));
-			diff|=make_tuple(max(pts)-min(pts),team,caps);
-		}
-		auto x=take(5,reversed(sorted(diff)));
-		for(auto [a,b,c]:x){
-			cout<<a<<"\t"<<b<<"\n";
-			//cout<<"\t"<<c<<"\n";
-			for(auto [source,cap]:c){
-				cout<<"\t"<<source<<"\t"<<points(cap)<<"\t"<<cap<<"\n";
-			}
-		}
+		compare(v);
 	}
 
 	/*{

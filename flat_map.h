@@ -49,6 +49,10 @@ class Flat_map{
 		}
 		return r;
 	}
+
+	void clear(){
+		data.clear();
+	}
 };
 
 template<typename K,typename V>

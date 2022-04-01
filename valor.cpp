@@ -7,8 +7,15 @@
 #include<boost/tokenizer.hpp>
 #include "util.h"
 #include "map.h"
+#include "strategy.h"
 
 using namespace std;
+
+template<typename T>
+T last(vector<T> const& v){
+	assert(v.size());
+	return v[v.size()-1];
+}
 
 //TODO: Make it so that the data can be passed in.
 
@@ -121,7 +128,17 @@ map<Team,Robot_capabilities> parse(string s){
 		);
 	};
 
-	return to_map(mapf(cap,labeled));
+	//return to_map(mapf(cap,labeled));
+	auto found=mapf(cap,labeled);
+	auto g=group([](auto x){ return x.first; },found);
+	return map_values(
+		[](vector<pair<Team,Robot_capabilities>> const& v){
+			assert(v.size());
+			//Give the results from the event in which they look the best
+			return argmax([](auto x){ return points(x); },seconds(v));
+		},
+		g
+	);
 }
 
 std::map<Team,Robot_capabilities> valor_data(std::string const& path){

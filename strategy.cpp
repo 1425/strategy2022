@@ -6,6 +6,14 @@
 
 using namespace std;
 
+template<typename T>
+T max_else(vector<T> const& v,T const& t){
+	if(v.empty()){
+		return t;
+	}
+	return max(v);
+}
+
 std::ostream& operator<<(std::ostream& o,Robot_strategy const& a){
 	o<<"Robot_strategy(";
 	#define X(A,B) o<<" "#B<<":"<<a.B;
@@ -220,7 +228,7 @@ vector<Alliance_strategy> alliance_strategies(){
 }
 
 double points(Robot_capabilities const& a){
-	double r=max(values(a.auto_pts))+a.tele_ball_pts;
+	double r=max_else(values(a.auto_pts),0.0)+a.tele_ball_pts;
 	for(auto [type,p]:a.endgame){
 		r+=value(type)*p;
 	}
