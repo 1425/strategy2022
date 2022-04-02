@@ -153,8 +153,7 @@ double teleop_score(Alliance_capabilities const& cap,Alliance_teleop_strategy co
 			r+=cap1.tele_ball_pts*time_multiplier;
 		}
 	}
-	//PRINT(r);
-	return 0.9*r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
+	return r+climb_score(cap,strat[0].climb,strat[1].climb,strat[2].climb);
 }
 
 pair<double,Alliance_teleop_strategy> teleop_score(Alliance_capabilities const& a){

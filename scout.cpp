@@ -4,6 +4,7 @@
 #include<boost/tokenizer.hpp>
 #include<boost/algorithm/string.hpp>
 #include "map.h"
+#include "strategy.h"
 
 using namespace std;
 
@@ -80,25 +81,6 @@ Endgame parse(Endgame const*,string const& s){
 	if(s=="") throw invalid_argument("blank");
 	throw invalid_argument{"Endgame unrecognized"};
 }
-
-#define USEFUL_ITEMS(X)\
-	X(Team,team,TeamNumber)\
-	X(int,match,MatchNum)\
-	X(tba::Alliance_color,alliance,Alliance)\
-	X(bool,taxi,auto__tarmac)\
-	X(Starting_location,start_position,auto__starting_position)\
-	X(unsigned,auto_high,auto__highhub)\
-	X(unsigned,auto_low,auto__lowhub)\
-	X(unsigned,tele_high,teleop__highhub)\
-	X(unsigned,tele_low,teleop__lowhub)\
-	X(Endgame,endgame,endgame__climb_position)\
-	X(unsigned,climbtime,endgame__climbtime)
-
-struct Useful_data{
-	#define X(A,B,C) A B;
-	USEFUL_ITEMS(X)
-	#undef X
-};
 
 ostream& operator<<(std::ostream& o,Useful_data const& a){
 	o<<"Useful_data{";
@@ -182,7 +164,35 @@ void team_details(string const& filename,Team const& team){
 	cout<<"Estimates:\n"<<caps[team]<<"\n";
 }
 
-Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
+double mean_discounted(vector<double> v,double discount_rate){
+	//assuming that v appears in chronological order, with later more recent
+	//discount rate should be in range 0-1
+	assert(v.size());
+
+	double numerator_total=0;
+	double denominator_total=0;
+	double weight=1;
+	for(auto x:reversed(v)){
+		numerator_total+=x*weight;
+		denominator_total+=weight;
+		weight*=(1-discount_rate);
+	}
+	return numerator_total/denominator_total;
+}
+
+template<typename T>
+vector<double> as_doubles(T const& t){
+	return MAP(double,t);
+}
+
+template<typename T>
+double mean_discounted(vector<T> const& v,double discount_rate){
+	return mean_discounted(as_doubles(v),discount_rate);
+}
+
+Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data,double discount_rate){
+	//Discount rate = how much less to weight each older piece of data; should be something in the range 0-1, hopefully closer to 0.
+
 	return Robot_capabilities{
 		#define ITEMS(A) mapf([](auto x){ return x.A; },data)
 		//auto_pts
@@ -195,8 +205,8 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 			//how many taxi points get at the worst spot they've tried
 			auto worst_taxi_pos_value=[&]()->double{
 				if(g.empty()) return 0;
-				return min(mapf(
-					[](auto data){ return mean_d(ITEMS(taxi)); },
+				return 2*min(mapf(
+					[=](auto data){ return mean_discounted(as_doubles(ITEMS(taxi)),discount_rate); },
 					values(g)
 				));
 			}();
@@ -211,7 +221,9 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 					auto data=f->second;
 					return make_pair(
 						loc,
-						mean_d(ITEMS(taxi))*2+mean_d(ITEMS(auto_high))*4+mean_d(ITEMS(auto_low))*2
+						mean_discounted(as_doubles(ITEMS(taxi)),discount_rate)*2+
+						mean_discounted(ITEMS(auto_high),discount_rate)*4+
+						mean_discounted(ITEMS(auto_low),discount_rate)*2
 					);
 				},
 				options((Starting_location*)0)
@@ -249,17 +261,26 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 				data
 			);
 			if(m.empty()) return double(0);
-			return mean(m)*(TELEOP_LEN-30);
+			return mean_discounted(m,discount_rate)*(TELEOP_LEN-30);
 			//old version: return mean_d(ITEMS(tele_high))*2+mean_d(ITEMS(tele_low));
 		}(),
 		//endgame
 		[&](){
-			auto x=to_multiset(ITEMS(endgame));
+			/*auto x=to_multiset(ITEMS(endgame));
 			map<Endgame,double> r;
 			for(auto elem:x){
 				r[elem]=(0.0+x.count(elem))/x.size();
 			}
-			return r;
+			return r;*/
+			map<Endgame,double> r;
+			double weight=1;
+			double total_weight=0;
+			for(auto endgame:reversed(ITEMS(endgame))){
+				r[endgame]+=weight;
+				total_weight+=weight;
+				weight*=(1-discount_rate);
+			}
+			return r/total_weight;
 		}(),
 		//climb time
 		[&]()->double{
@@ -270,7 +291,7 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data){
 				v|=match.climbtime;
 			}
 			if(v.empty()) return 30;
-			return mean(v);
+			return mean_discounted(v,discount_rate);
 		}(), 1
 		#undef ITEMS
 	};
@@ -401,26 +422,9 @@ void outliers(vector<Useful_data> const& v){
 	#undef X
 }
 
-map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
-	/*auto x=parse_pit_scouting();
-	PRINT(x);*/
-
-	auto vu=parse_csv_inner(filename,verbose);
-	if(verbose) outliers(vu);
-	//things to look at:
-	//how many matches for each team
-	//set of teams is different in the same match
-	//for each column:
-		//min/max values
-		//most common values
-
-	//todo: endgame times put in.
-	//endgame__climbtime
-
-
-
+map<Team,Robot_capabilities> capabilities_by_team(vector<Useful_data> const& vu,double discount_rate){
 	return map_values(
-		to_robot_capabilities,
+		[=](auto x){ return to_robot_capabilities(x,discount_rate); },
 		group(
 			[](auto x){ return x.team; },
 			vu
@@ -428,3 +432,11 @@ map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 	);
 }
 
+map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
+	/*auto x=parse_pit_scouting();
+	PRINT(x);*/
+
+	auto vu=parse_csv_inner(filename,verbose);
+	if(verbose) outliers(vu);
+	return capabilities_by_team(vu);
+}

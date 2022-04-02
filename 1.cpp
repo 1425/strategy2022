@@ -1,12 +1,17 @@
 #include<set>
 #include<iomanip>
 #include<functional>
+#include<fstream>
+#include<cmath>
+#include "../tba/db.h"
+#include "../tba/tba.h"
 #include "valor.h"
 #include "tba.h"
 #include "scout.h"
 #include "map.h"
 #include "array.h"
 #include "strategy.h"
+#include "util.h"
 
 //start generic code
 
@@ -113,12 +118,17 @@ string show(Picklist const& p){
 	);
 }
 
+//Move to tba.h?
+struct TBA_setup{
+	std::string auth_key_path="../tba/auth_key";
+	std::string cache_path="../tba/cache.db";
+};
+
 struct Args{
 	Team team{1425};
 	string scouting_data_path="data/orwil_match.csv";
 	string valor_data_path="data/Valor Scout.html";
-	string tba_auth_key_path="../tba/auth_key";
-	string tba_cache_path="../tba/cache.db";
+	TBA_setup tba;
 	tba::Event_key event_key{"2022orwil"};
 	bool verbose=0;
 	bool compare=0;
@@ -126,6 +136,7 @@ struct Args{
 	std::optional<std::string> pit_scouting_data_path;
 	std::optional<std::array<Team, 3>> team_list; 
 	std::optional<std::array<Team,6>> match6;
+	bool trend_check=0;
 };
 
 Args parse_args(int argc,char **argv){
@@ -196,7 +207,7 @@ Args parse_args(int argc,char **argv){
 			{"PATH"},
 			"Path to file containing authorization key to talk to The Blue Alliance",
 			[&](vector<string> v){
-				r.tba_auth_key_path=v[0];
+				r.tba.auth_key_path=v[0];
 			}
 		},
 		{
@@ -204,7 +215,7 @@ Args parse_args(int argc,char **argv){
 			{"PATH"},
 			"Path to use for cache of data from The Blue Alliance",
 			[&](vector<string> v){
-				r.tba_cache_path=v[0];
+				r.tba.cache_path=v[0];
 			}
 		},
 		{
@@ -244,6 +255,13 @@ Args parse_args(int argc,char **argv){
 					},
 					range_st<6>()
 				);
+			}
+		},
+		{
+			"--trend_check",{},
+			"Look at the trends of how teams do throughout an event",
+			[&](vector<string>){
+				r.trend_check=1;
 			}
 		}
 	};
@@ -530,8 +548,177 @@ void compare(vector<pair<string,Caps>> v){
 	compare_inner(v);
 }
 
+template<typename T>
+T median(vector<T> v){
+	assert(v.size());
+	sort(v.begin(),v.end());
+	return v[v.size()/2];
+}
+
+tba::Cached_fetcher tba_fetcher(TBA_setup const& tba){
+	ifstream file{tba.auth_key_path};
+	string tba_key;
+	getline(file,tba_key);
+	return tba::Cached_fetcher{tba::Fetcher{tba::Nonempty_string{tba_key}},tba::Cache{tba.cache_path.c_str()}};
+}
+
+Team team_number(tba::Team_key const& a){
+	return Team{stoi(a.str().substr(3,10))};
+}
+
+template<size_t N,typename T>
+std::array<T,N> to_array(std::vector<T> const& v){
+	assert(v.size()==N);
+	std::array<T,N> r;
+	for(auto i:range_st<N>()){
+		r[i]=v[i];
+	}
+	return r;
+}
+
+pair<double,double> predictor(std::vector<tba::Match_Simple> const& match_results,std::vector<Useful_data> const& v,double discount){
+	vector<double> error,squared_error;
+
+	for(
+		auto match:match_results
+	){
+		if(match.comp_level!=tba::Competition_level::qm){
+			continue;
+		}
+		//PRINT(match.match_number);
+		auto data=filter(
+			[=](auto x){ return x.match<match.match_number; },
+			v
+		);
+		//PRINT(data.size());
+
+		//could speed this up by filtering to only the teams that we care about.
+		auto all_caps=capabilities_by_team(data,discount);
+		//PRINT(all_caps.size());
+
+		auto f=[&](tba::Match_Alliance const& a){
+			auto cap=mapf(
+				[&](auto team){
+					auto f=all_caps.find(team_number(team));
+					if(f==all_caps.end()){
+						//if no data, assume robot does nothing.
+						return Robot_capabilities{};
+					}
+					return f->second;
+				},
+				a.team_keys
+			);
+			auto expected=expected_score(to_array<3>(cap)).first;
+			if(a.score.valid()){
+				auto actual=a.score.value();
+				//PRINT(expected);
+				//PRINT(actual);
+				error|=fabs(expected-actual);
+				squared_error|=pow(expected-actual,2);
+			}
+		};
+		f(match.alliances.red);
+		f(match.alliances.blue);
+	}
+	return make_pair(
+		mean(error),
+		sqrt(mean(squared_error))
+	);
+}
+
+void picklist_change(std::string const& scouting_csv_path){
+	auto v=parse_csv_inner(scouting_csv_path,0);
+	map<Team,vector<pair<double,int>>> m;
+	auto xs=range(0.0,1.0,.01);
+	for(auto x:xs){
+		auto caps=capabilities_by_team(v,x);
+		auto pl=make_picklist(Team{1425},caps);
+		assert(holds_alternative<Picklist>(pl));
+		auto [main_team,list]=get<0>(pl);
+		for(auto [i,y]:enumerate_from(1,list)){
+			auto [team,v,second]=y;
+			m[team]|=make_pair(x,i);
+		}
+	}
+
+	//label
+	for(auto x:xs) cout<<"\t"<<x;
+	cout<<"\n";	
+
+	for(auto [team,ranks]:m){
+		cout<<team;
+		for(auto [discount,rank]:ranks){
+			cout<<"\t"<<rank;
+		}
+		cout<<"\n";
+	}
+}
+
+void predictor(std::string const& scouting_csv_path,TBA_setup const& tba_setup){
+	picklist_change(scouting_csv_path);
+
+	auto f=tba_fetcher(tba_setup);
+	tba::Event_key event{"2022orsal"};//TODO: Have this get passed in
+	auto match_results=sort_by(
+		event_matches_simple(f,event),
+		[](auto x){ return x.match_number; }
+	);
+
+	//ignore matches where most teams probably haven't played a match yet, so no data.
+	match_results=filter(
+		[](auto x){ return x.match_number>5; },
+		match_results
+	);
+
+	auto v=parse_csv_inner(scouting_csv_path,0);
+	for(auto x:range<double>(0.0,.25,.001)){
+		//PRINT(x);
+		auto p=predictor(match_results,v,x);
+		cout<<x<<"\t"<<p.first<<"\t"<<p.second<<"\n";
+	}
+}
+
+void trend_check(std::string const& path,TBA_setup const& tba_setup){
+	predictor(path,tba_setup);
+
+	//vector<Useful_data> parse_csv_inner(std::string const& filename,bool verbose){
+	auto v=parse_csv_inner(path,0);
+	auto g=group([](auto x){ return x.team; },v);
+
+	map<int,vector<double>> by_round;
+
+	for(auto [team,data]:g){
+		//PRINT(team);
+		//print_lines(data);
+		auto m=::mapf(
+			[](auto x){
+				return points(to_robot_capabilities(vector<Useful_data>{x}));
+			},
+			data
+		);
+		//cout<<team<<"\t"<<min(m)<<"\t"<<median(m)<<"\t"<<max(m)<<"\t"<<mean(m)<<"\t"<<std_dev(m)<<"\n";
+		cout<<team;
+		for(auto x:m) cout<<"\t"<<x;
+		cout<<"\n";
+
+		for(auto [i,x]:enumerate(m)){
+			by_round[i]|=x;
+		}
+	}
+
+	cout<<"By round\n";
+	for(auto [i,v1]:by_round){
+		cout<<i<<"\t"<<mean(v1)<<"\t"<<std_dev(v1)<<"\n";
+	}
+}
+
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
+
+	if(args.trend_check){
+		trend_check(args.scouting_data_path,args.tba);
+		return 0;
+	}
 
 	if(args.pit_scouting_data_path){
 		return parse_pit_scouting(*args.pit_scouting_data_path);
@@ -546,7 +733,7 @@ int main(int argc,char **argv){
 	}
 
 	{
-		auto p1=from_tba(args.tba_auth_key_path,args.tba_cache_path,args.event_key);
+		auto p1=from_tba(args.tba.auth_key_path,args.tba.cache_path,args.event_key);
 		if(holds_alternative<Caps>(p1)){
 			v|=make_pair("tba",std::get<Caps>(p1));
 		}else{

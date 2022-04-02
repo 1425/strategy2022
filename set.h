@@ -244,4 +244,14 @@ std::ostream& operator<<(std::ostream& o,std::set<T> const& a){
 	return o<<"}";
 }
 
+template<typename T>
+T max(std::set<T> const& a){
+	assert(a.size());
+	T r=*begin(a);
+	for(auto elem:a){
+		r=std::max(r,elem);
+	}
+	return r;
+}
+
 #endif

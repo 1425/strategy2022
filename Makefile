@@ -1,4 +1,4 @@
-CXXFLAGS=-std=c++20 -Wall -Wextra -Werror
+CXXFLAGS=-std=c++20 -Wall -Wextra -Ofast
 
 all: 1 pic
 
