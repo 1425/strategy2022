@@ -446,6 +446,8 @@ std::vector<T> sort_by(std::vector<T> a,Func f){
 	return a;
 }
 
+#define SORT_BY(A,B) sort_by((A),[&](auto x){ return (B)(x); })
+
 template<typename T>
 std::vector<T> rand(std::vector<T> const*){
 	return mapf(

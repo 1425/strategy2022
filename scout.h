@@ -27,9 +27,10 @@ struct Useful_data{
 };
 
 std::vector<Useful_data> parse_csv_inner(std::string const&,bool);
-Robot_capabilities to_robot_capabilities(std::vector<Useful_data> const& data,double discount_rate=0);
+Robot_capabilities to_robot_capabilities(std::vector<Useful_data> const& data,double discount_rate=0,std::vector<Useful_data> const& extra_data={});
 std::map<Team,Robot_capabilities> capabilities_by_team(std::vector<Useful_data> const&,double discount_rate=0);
 
 double std_dev(std::vector<double> const&);
+Endgame_px count_endgames(std::vector<std::pair<Endgame,std::vector<Endgame>>> const&,double);
 
 #endif

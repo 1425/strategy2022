@@ -65,11 +65,16 @@ vector<Alliance_teleop_strategy> alliance_teleop_strategies(){
 }
 
 double points(Endgame_px const& e){
-	auto r=0;
+	if(e.empty()) return 0;
+	return max(mapf(
+		[](auto x){ return value(x.first)*x.second; },
+		e
+	));
+	/*auto r=0;
 	for(auto [k,v]:e){
 		r+=value(k)*v;
 	}
-	return r;
+	return r;*/
 }
 
 double climb_score(Alliance_capabilities const& a,bool c0,bool c1,bool c2){
@@ -114,12 +119,10 @@ double climb_score(Alliance_capabilities const& a,bool c0,bool c1,bool c2){
 	for(auto endgame_px:v){
 		auto f=filter_keys(available,endgame_px);
 		if(f.empty()) continue;
-		auto target=argmax(value,keys(f));
+		auto target=argmax([](auto x){ return value(x.first)*x.second; },to_vec(f)).first;
 		mark(target);
 		auto left=sum(values(f));
 		assert(left>0);
-		//cout<<"end "<<endgame_px<<"\t"<<left<<"\n";
-		//PRINT(endgame_px/left);
 		total+=points(endgame_px);
 	}
 	//cout<<"climb:"<<total<<"\n";

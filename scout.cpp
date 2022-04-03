@@ -6,11 +6,43 @@
 #include "map.h"
 #include "strategy.h"
 
-using namespace std;
+template<typename T>
+std::vector<double> as_doubles(T const& t){
+	return MAP(double,t);
+}
 
-template<typename A,typename B>
-std::vector<B> seconds(std::vector<tuple<A,B>> const&){
-	nyi
+double mean_discounted(std::vector<double> v,double discount_rate){
+	//assuming that v appears in chronological order, with later more recent
+	//discount rate should be in range 0-1
+	assert(v.size());
+
+	double numerator_total=0;
+	double denominator_total=0;
+	double weight=1;
+	for(auto x:reversed(v)){
+		numerator_total+=x*weight;
+		denominator_total+=weight;
+		weight*=(1-discount_rate);
+	}
+	return numerator_total/denominator_total;
+}
+
+template<typename T>
+double mean_discounted(std::vector<T> const& v,double discount_rate){
+	return mean_discounted(as_doubles(v),discount_rate);
+}
+
+template<typename A,typename B,typename C>
+std::vector<C> thirds(std::vector<std::tuple<A,B,C>> const& v){
+	return mapf([](auto x){ return get<2>(x); },v);
+}
+
+double std_dev(std::vector<double> const& v){
+	auto u=mean(v);
+	return sqrt(mean(mapf(
+		[u](auto x){ return pow(x-u,2); },
+		v
+	)));
 }
 
 template<typename A,typename B>
@@ -21,6 +53,8 @@ std::ostream& operator<<(std::ostream& o,std::tuple<A,B> const& a){
 std::string upper(std::string const& s){
 	return boost::to_upper_copy<std::string>(s);
 }
+
+using namespace std;
 
 int parse_pit_scouting(std::string const& path="data/test_pit.csv"){
 	ifstream f(path);
@@ -164,33 +198,76 @@ void team_details(string const& filename,Team const& team){
 	cout<<"Estimates:\n"<<caps[team]<<"\n";
 }
 
-double mean_discounted(vector<double> v,double discount_rate){
-	//assuming that v appears in chronological order, with later more recent
-	//discount rate should be in range 0-1
-	assert(v.size());
+auto options(Endgame const*){
+	return endgames();
+}
 
-	double numerator_total=0;
-	double denominator_total=0;
+auto points(Endgame a){
+	return value(a);
+}
+
+Endgame_px count_endgames(vector<pair<Endgame,vector<Endgame>>> const& observed_endgames,double discount_rate){
+	//Assuming that observed ingame is passed in oldest matches first.
+
+	//First item is # of times it was available and something better was not taken
+	//Second # is # of times that it was taken
+	map<Endgame,pair<double,double>> slot_results;
+
 	double weight=1;
-	for(auto x:reversed(v)){
-		numerator_total+=x*weight;
-		denominator_total+=weight;
+	for(auto [this_team,others]:reversed(observed_endgames)){
+		map<Endgame,unsigned> m; //the slots that are taken up by alliance partners
+		for(auto x:others){
+			switch(x){
+				case Endgame::Traversal:
+					m[Endgame::Traversal]++;
+					m[Endgame::High]++;
+					break;
+				case Endgame::High:
+					m[Endgame::Traversal]++;
+					m[Endgame::High]++;
+					m[Endgame::Mid]++;
+					break;
+				case Endgame::Mid:
+					m[Endgame::High]++;
+					m[Endgame::Mid]++;
+					m[Endgame::Low]++;
+					break;
+				case Endgame::Low:
+					m[Endgame::Mid]++;
+					m[Endgame::Low]++;
+					break;
+				case Endgame::None:
+					break;
+				default:
+					assert(0);
+			}
+		}
+		auto available=filter(
+			[&](auto x){ return m[x]<2; },
+			options((Endgame*)0)
+		);
+		slot_results[this_team].first+=weight;
+		slot_results[this_team].second+=weight;
+		for(auto a:available){
+			if(points(a)>points(this_team)){
+				slot_results[a].first+=weight;
+			}
+		}
 		weight*=(1-discount_rate);
 	}
-	return numerator_total/denominator_total;
+	Endgame_px r;
+	for(auto endgame:endgames()){
+		auto [could,did]=slot_results[endgame];
+		if(could){
+			auto value=double(did)/could;
+			r[endgame]=value;
+		}
+	}
+	r[Endgame::None]=1;
+	return r;
 }
 
-template<typename T>
-vector<double> as_doubles(T const& t){
-	return MAP(double,t);
-}
-
-template<typename T>
-double mean_discounted(vector<T> const& v,double discount_rate){
-	return mean_discounted(as_doubles(v),discount_rate);
-}
-
-Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data,double discount_rate){
+Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data,double discount_rate,vector<Useful_data> const& extra_data){
 	//Discount rate = how much less to weight each older piece of data; should be something in the range 0-1, hopefully closer to 0.
 
 	return Robot_capabilities{
@@ -272,7 +349,18 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data,double 
 				r[elem]=(0.0+x.count(elem))/x.size();
 			}
 			return r;*/
-			map<Endgame,double> r;
+			vector<pair<Endgame,vector<Endgame>>> endgames;
+			for(auto team_match:data){
+				auto f=filter(
+					[=](auto x){ return x.match==team_match.match && x.alliance==team_match.alliance && x.team!=team_match.team; },
+					extra_data
+				);
+				auto m=mapf([](auto x){ return x.endgame; },f);
+				endgames|=make_pair(team_match.endgame,m);
+			}
+			return count_endgames(endgames,discount_rate);
+
+			/*map<Endgame,double> r;
 			double weight=1;
 			double total_weight=0;
 			for(auto endgame:reversed(ITEMS(endgame))){
@@ -280,7 +368,7 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data,double 
 				total_weight+=weight;
 				weight*=(1-discount_rate);
 			}
-			return r/total_weight;
+			return r/total_weight;*/
 		}(),
 		//climb time
 		[&]()->double{
@@ -298,19 +386,6 @@ Robot_capabilities to_robot_capabilities(vector<Useful_data> const& data,double 
 }
 
 using Match=int;
-
-template<typename A,typename B,typename C>
-vector<C> thirds(vector<std::tuple<A,B,C>> const& v){
-	return mapf([](auto x){ return get<2>(x); },v);
-}
-
-double std_dev(std::vector<double> const& v){
-	auto u=mean(v);
-	return sqrt(mean(mapf(
-		[u](auto x){ return pow(x-u,2); },
-		v
-	)));
-}
 
 //tuple(type name,Team,Match,value,z-score)
 void outliers(std::string const& name,vector<tuple<Team,Match,double>> v){
@@ -424,7 +499,7 @@ void outliers(vector<Useful_data> const& v){
 
 map<Team,Robot_capabilities> capabilities_by_team(vector<Useful_data> const& vu,double discount_rate){
 	return map_values(
-		[=](auto x){ return to_robot_capabilities(x,discount_rate); },
+		[=](auto x){ return to_robot_capabilities(x,discount_rate,vu); },
 		group(
 			[](auto x){ return x.team; },
 			vu

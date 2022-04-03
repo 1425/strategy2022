@@ -5,8 +5,19 @@
 #include "../tba/tba.h"
 #include "opr.h"
 #include "map.h"
+#include "scout.h"
 
 using namespace std;
+
+template<typename T>
+multiset<T> operator-(multiset<T> a,T t){
+	//if you just do a.erase(t) you will remove all instances, not just one.
+	auto f=a.find(t);
+	if(f!=a.end()){
+		a.erase(f);
+	}
+	return a;
+}
 
 using Event_key=tba::Event_key;
 
@@ -30,7 +41,7 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 	To_solve auto_cargo_upper,auto_cargo_lower;
 	To_solve tele_cargo_upper,tele_cargo_lower;
 	
-	map<Team,multiset<Endgame>> endgame;
+	map<Team,vector<pair<Endgame,vector<Endgame>>>> endgame;
 	
 	auto process_alliance=[&](tba::Match_Alliance alliance,tba::Match_Score_Breakdown_2022_Alliance scores){
 		auto teams=mapf(to_team,alliance.team_keys|alliance.surrogate_team_keys);
@@ -67,7 +78,7 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 		e(scores.endgameRobot2);
 		e(scores.endgameRobot3);
 		for(auto [t,e]:zip(teams,endgames)){
-			endgame[t]|=e;
+			endgame[t]|=make_pair(e,to_vec(to_multiset(endgames)-e));
 		}
 	};
 
@@ -109,12 +120,14 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 				}(),
 				avg_tele_cargo_upper[team]+avg_tele_cargo_lower[team],
 				[&](){
-					map<Endgame,double> r;
+					static const double discount_rate=0.07;
+					return count_endgames(endgame[team],discount_rate);
+					/*map<Endgame,double> r;
 					auto e=endgame[team];
 					for(auto x:e){
 						r[x]=(0.0+e.count(x))/e.size();
 					}
-					return r;
+					return r;*/
 				}(),
 				30,
 				1
