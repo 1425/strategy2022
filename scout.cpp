@@ -438,5 +438,5 @@ map<Team,Robot_capabilities> parse_csv(string const& filename,bool verbose){
 
 	auto vu=parse_csv_inner(filename,verbose);
 	if(verbose) outliers(vu);
-	return capabilities_by_team(vu);
+	return capabilities_by_team(vu,.07);
 }
