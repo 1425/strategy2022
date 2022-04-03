@@ -494,6 +494,8 @@ auto argmax(Func f,T const& a){
 	return r;
 }
 
+#define ARGMAX(A,B) argmax([&](auto x){ return (A)(x); },(B))
+
 template<typename T>
 std::vector<T> operator+(std::vector<T> a,std::vector<T> b){
 	a|=b;

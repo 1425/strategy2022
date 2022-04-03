@@ -3,6 +3,7 @@
 #include<functional>
 #include<fstream>
 #include<cmath>
+#include<filesystem>
 #include "../tba/db.h"
 #include "../tba/tba.h"
 #include "valor.h"
@@ -26,6 +27,21 @@ std::array<T,N> to_array(std::vector<T> const& v){
 	for(auto i:range_st<N>()){
 		new(&r[i]) T(v[i]);
 	}
+	return r;
+}
+
+template<typename T,size_t A,size_t B>
+std::array<T,A+B> operator|(std::array<T,A> const& a,std::array<T,B> const& b){
+	std::array<T,A+B> r;
+	int i=0;
+	for(auto elem:a) r[i++]=elem;
+	for(auto elem:b) r[i++]=elem;
+	return r;
+}
+
+std::vector<std::filesystem::directory_entry> to_vec(std::filesystem::directory_iterator a){
+	std::vector<std::filesystem::directory_entry> r;
+	for(auto elem:a) r|=elem;
 	return r;
 }
 
@@ -481,8 +497,26 @@ int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m
 		);
 	};
 
+	auto show_team=[&](Team team){
+		auto fail=h2(team)+p("No image");
+		try{
+			auto files=to_vec(std::filesystem::directory_iterator("photos/frc"+as_string(team)));
+			if(files.empty()) return fail;
+
+			//Choose the file with the largest size to show.
+			auto to_show=ARGMAX(std::filesystem::file_size,files);
+
+			return h2(team)+"<img src="+as_string(to_show)+" width=\"100%\">";//p(to_vec(files));
+		}catch(std::filesystem::filesystem_error const&){
+			return fail;
+		}
+	};
+
 	auto photos=[&]()->string{
-		return "";
+		return table(
+			tr(join(mapf([=](auto x){ return tag("td width=30% valign=top",show_team(x)); },red)))+
+			tr(join(mapf([=](auto x){ return tag("td valign=top",show_team(x)); },blue)))
+		);
 	};
 
 	auto h=html(
