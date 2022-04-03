@@ -15,6 +15,19 @@
 
 //start generic code
 
+template<size_t N,typename T>
+std::array<T,N> to_array(std::vector<T> const& v){
+	assert(v.size()==N);
+	using Data=std::array<T,N>;
+
+	//This funny dance with placement new exists so that items that are not default-constructable can still use this function.
+	char s[sizeof(Data)];
+	Data &r=*(Data*)s;
+	for(auto i:range_st<N>()){
+		new(&r[i]) T(v[i]);
+	}
+	return r;
+}
 
 //start program-specific code
 
@@ -23,6 +36,13 @@ using namespace std;
 string round2(double d){
 	stringstream ss;
 	ss<<std::setprecision(2);
+	ss<<d;
+	return ss.str();
+}
+
+string round3(double d){
+	stringstream ss;
+	ss<<std::setprecision(3);
 	ss<<d;
 	return ss.str();
 }
@@ -461,6 +481,10 @@ int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m
 		);
 	};
 
+	auto photos=[&]()->string{
+		return "";
+	};
+
 	auto h=html(
 		head(title(title1))+
 		body(
@@ -473,9 +497,9 @@ int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m
 					tag("th colspan=3","Blue")
 				)+
 				tr(
-					tag("td colspan=3 align=center",round2(red_exp.first))+
+					tag("td colspan=3 align=center",round3(red_exp.first))+
 					th("Expected net score")+
-					tag("td colspan=3 align=center",round2(blue_exp.first))
+					tag("td colspan=3 align=center",round3(blue_exp.first))
 				)+
 				tr(
 					join(MAP(th,red))+th("Team")+join(MAP(th,blue))
@@ -497,7 +521,8 @@ int match6(std::array<Team,6> const& teams,map<Team,Robot_capabilities> const& m
 				wcap("Endgame Low",[](auto x){ return round2(x.endgame[Endgame::Low]); })+
 				wcap("Endgame None",[](auto x){ return round2(x.endgame[Endgame::None]); })+
 				wcap("Climb time",[](auto x){ return round2(x.climb_time); })
-			)
+			)+
+			photos()
 		)
 	);
 	auto filename="match6.html";
@@ -564,16 +589,6 @@ tba::Cached_fetcher tba_fetcher(TBA_setup const& tba){
 
 Team team_number(tba::Team_key const& a){
 	return Team{stoi(a.str().substr(3,10))};
-}
-
-template<size_t N,typename T>
-std::array<T,N> to_array(std::vector<T> const& v){
-	assert(v.size()==N);
-	std::array<T,N> r;
-	for(auto i:range_st<N>()){
-		r[i]=v[i];
-	}
-	return r;
 }
 
 pair<double,double> predictor(std::vector<tba::Match_Simple> const& match_results,std::vector<Useful_data> const& v,double discount){
@@ -654,7 +669,59 @@ void picklist_change(std::string const& scouting_csv_path){
 	}
 }
 
+void sample_window(std::string const& scouting_csv_path,TBA_setup const& tba_setup){
+	auto f=tba_fetcher(tba_setup);
+	tba::Event_key event{"2022orsal"};//TODO: Have this get passed in
+	auto match_results=sort_by(
+		event_matches_simple(f,event),
+		[](auto x){ return x.match_number; }
+	);
+	match_results=filter(
+		[](auto x){
+			return x.comp_level==tba::Competition_level::qm && x.match_number>5;
+		},
+		match_results
+	);
+	auto v=parse_csv_inner(scouting_csv_path,0);
+	cout<<"Hard window results\n";
+	for(auto n:range(0,13)){
+		vector<double> l1,l2;
+		for(auto match:match_results){
+			auto present_data=filter([=](auto x){ return x.match<match.match_number; },v);
+			//use only the last n matches of the teams in question
+			auto run=[&](tba::Match_Alliance const& a){
+				auto caps=mapf(
+					[=](auto team_key){
+						Team team=team_number(team_key);
+						auto scouted_data=take(n,reversed(filter(
+							[=](auto x){
+								return x.team==team;
+							},
+							present_data
+						)));
+						return to_robot_capabilities(scouted_data);
+					},
+					to_array<3>(a.team_keys)
+				);
+				auto expected=expected_score(caps).first;
+				if(a.score.valid()){
+					auto observed=a.score.value();
+					auto l1_v=fabs(expected-observed);
+					auto l2_v=pow(expected-observed,2);
+					l1|=l1_v;
+					l2|=l2_v;
+				}
+			};
+			run(match.alliances.red);
+			run(match.alliances.blue);
+		}
+		//PRINT(l1.size());
+		cout<<n<<"\t"<<mean(l1)<<"\t"<<sqrt(mean(l2))<<"\n";
+	}
+}
+
 void predictor(std::string const& scouting_csv_path,TBA_setup const& tba_setup){
+	sample_window(scouting_csv_path,tba_setup);
 	picklist_change(scouting_csv_path);
 
 	auto f=tba_fetcher(tba_setup);
