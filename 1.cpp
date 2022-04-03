@@ -75,7 +75,9 @@ string show(map<Team,Robot_capabilities> const& a){
 					tag("th rowspan=2","Team")+
 					tag("th colspan=4","Auto pts by location")+
 					tag("th rowspan=2","Tele Ball pts")+
-					tag("th colspan=5","Endgame Probability")
+					tag("th colspan=5","Endgame Probability")+
+					tag("th rowspan=2","Climb time")+
+					tag("th rowspan=2","Defense OK")
 				)+
 				tr(
 					th(1)+th(2)+th(3)+th(4)+
@@ -100,7 +102,9 @@ string show(map<Team,Robot_capabilities> const& a){
 								options((Starting_location*)0)
 							))+
 							td(round2(data.tele_ball_pts))+
-							join(mapf([&](auto x){ return td(round2(data.endgame[x])); },endgames()))
+							join(mapf([&](auto x){ return td(round2(data.endgame[x])); },endgames()))+
+							td(round2(data.climb_time))+
+							td(data.defense_okay)
 						);
 					},
 					a
