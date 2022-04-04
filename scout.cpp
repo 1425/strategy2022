@@ -491,7 +491,41 @@ void outliers(std::string const& name,vector<tuple<Team,Match,T>> const& v){
 	nyi
 }
 
+void alliance_combos_endgame(vector<Useful_data> const& v){
+	auto g=group([](auto x){ return make_pair(x.match,x.alliance); },v);
+	map<multiset<Endgame>,vector<pair<Match,tba::Alliance_color>>> seen;
+	for(auto [id,data]:g){
+		auto result=to_multiset(mapf([](auto x){ return x.endgame; },data));
+		seen[result]|=id;
+		//TODO: End results & try to measure if they're possible.
+	}
+	cout<<"Endgames\n";
+	//print_lines(seen);
+	for(auto [k,v]:seen){
+		cout<<mapf([](auto x){ return as_string(x)[0]; },k)<<"    \t"<<v.size()<<"\t"<<take(5,v)<<"\n";
+	}
+}
+
+void alliance_combos(vector<Useful_data> const& v){
+	alliance_combos_endgame(v);
+
+	auto g=group([](auto x){ return make_pair(x.match,x.alliance); },v);
+	map<multiset<Starting_location>,vector<pair<Match,tba::Alliance_color>>> seen;
+	for(auto [id,data]:g){
+		auto result=to_multiset(mapf([](auto x){ return x.start_position; },data));
+		seen[result]|=id;
+		//TODO: End results & try to measure if they're possible.
+	}
+	cout<<"Start positions\n";
+	//print_lines(seen);
+	for(auto [k,v]:seen){
+		cout<<k<<"    \t"<<v.size()<<"\t"<<take(5,v)<<"\n";
+	}
+}
+
 void outliers(vector<Useful_data> const& v){
+	alliance_combos(v);
+
 	#define X(A,B,C) outliers(""#B,mapf([](auto x){ return make_tuple(x.team,x.match,x.B); },v));
 	USEFUL_ITEMS(X)
 	#undef X
