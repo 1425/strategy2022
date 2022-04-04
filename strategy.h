@@ -28,4 +28,13 @@ using Picklist=std::pair<Team,std::vector<Picklist_row>>;
 
 std::variant<Picklist,std::string> make_picklist(Team const&,std::map<Team,Robot_capabilities>);
 
+class Climb_space{
+	std::map<Endgame,int> m;
+
+	public:
+	void fill(Endgame);
+	bool open(Endgame)const;
+	std::set<Endgame> open()const;
+};
+
 #endif

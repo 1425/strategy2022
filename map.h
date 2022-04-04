@@ -100,6 +100,8 @@ std::map<K,V> filter_keys(Func f,std::map<K,V> a){
 	return r;
 }
 
+#define FILTER_KEYS(A,B) filter_keys([&](auto x){ return (A)(x); },(B))
+
 template<typename K,typename V>
 std::map<K,V> without_key(K const& k,std::map<K,V> a){
 	a.erase(k);

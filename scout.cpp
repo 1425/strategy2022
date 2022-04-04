@@ -6,6 +6,13 @@
 #include "map.h"
 #include "strategy.h"
 
+template<typename Func,typename T>
+void mapv(Func f,T t){
+	for(auto elem:t) f(elem);
+}
+
+#define MAPV(A,B) mapv([&](auto x){ return (A)(x); },(B))
+
 template<typename T>
 std::vector<double> as_doubles(T const& t){
 	return MAP(double,t);
@@ -215,40 +222,11 @@ Endgame_px count_endgames(vector<pair<Endgame,vector<Endgame>>> const& observed_
 
 	double weight=1;
 	for(auto [this_team,others]:reversed(observed_endgames)){
-		map<Endgame,unsigned> m; //the slots that are taken up by alliance partners
-		for(auto x:others){
-			switch(x){
-				case Endgame::Traversal:
-					m[Endgame::Traversal]++;
-					m[Endgame::High]++;
-					break;
-				case Endgame::High:
-					m[Endgame::Traversal]++;
-					m[Endgame::High]++;
-					m[Endgame::Mid]++;
-					break;
-				case Endgame::Mid:
-					m[Endgame::High]++;
-					m[Endgame::Mid]++;
-					m[Endgame::Low]++;
-					break;
-				case Endgame::Low:
-					m[Endgame::Mid]++;
-					m[Endgame::Low]++;
-					break;
-				case Endgame::None:
-					break;
-				default:
-					assert(0);
-			}
-		}
-		auto available=filter(
-			[&](auto x){ return m[x]<2; },
-			options((Endgame*)0)
-		);
+		Climb_space space;
+		MAPV(space.fill,others);
 		slot_results[this_team].first+=weight;
 		slot_results[this_team].second+=weight;
-		for(auto a:available){
+		for(auto a:space.open()){
 			if(points(a)>points(this_team)){
 				slot_results[a].first+=weight;
 			}
@@ -491,6 +469,17 @@ void outliers(std::string const& name,vector<tuple<Team,Match,T>> const& v){
 	nyi
 }
 
+bool combo_looks_ok(multiset<Endgame> const& a){
+	Climb_space space;
+	for(auto x:a){
+		if(!space.open(x)){
+			return 0;
+		}
+		space.fill(x);
+	}
+	return 1;
+}
+
 void alliance_combos_endgame(vector<Useful_data> const& v){
 	auto g=group([](auto x){ return make_pair(x.match,x.alliance); },v);
 	map<multiset<Endgame>,vector<pair<Match,tba::Alliance_color>>> seen;
@@ -502,8 +491,15 @@ void alliance_combos_endgame(vector<Useful_data> const& v){
 	cout<<"Endgames\n";
 	//print_lines(seen);
 	for(auto [k,v]:seen){
-		cout<<mapf([](auto x){ return as_string(x)[0]; },k)<<"    \t"<<v.size()<<"\t"<<take(5,v)<<"\n";
+		if(!combo_looks_ok(k)){
+			cout<<mapf([](auto x){ return as_string(x)[0]; },k)<<"    \t"<<v.size()<<"\t"<<take(5,v)<<"\n";
+		}
 	}
+}
+
+bool combo_looks_ok(multiset<Starting_location> const& a){
+	//looks ok if there are no duplicates.
+	return to_set(a).size()==a.size();
 }
 
 void alliance_combos(vector<Useful_data> const& v){
@@ -519,7 +515,9 @@ void alliance_combos(vector<Useful_data> const& v){
 	cout<<"Start positions\n";
 	//print_lines(seen);
 	for(auto [k,v]:seen){
-		cout<<k<<"    \t"<<v.size()<<"\t"<<take(5,v)<<"\n";
+		if(!combo_looks_ok(k)){
+			cout<<k<<"    \t"<<v.size()<<"\t"<<take(5,v)<<"\n";
+		}
 	}
 }
 

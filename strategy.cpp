@@ -14,6 +14,43 @@ T max_else(vector<T> const& v,T const& t){
 	return max(v);
 }
 
+void Climb_space::fill(Endgame g){
+	switch(g){
+		case Endgame::Traversal:
+			m[Endgame::Traversal]++;
+			m[Endgame::High]++;
+			break;
+		case Endgame::High:
+			m[Endgame::Traversal]++;
+			m[Endgame::High]++;
+			m[Endgame::Mid]++;
+			break;
+		case Endgame::Mid:
+			m[Endgame::High]++;
+			m[Endgame::Mid]++;
+			m[Endgame::Low]++;
+			break;
+		case Endgame::Low:
+			m[Endgame::Low]++;
+			break;
+		case Endgame::None:
+			//plenty of room on the floor
+			break;
+		default:
+			assert(0);
+		}
+}
+
+bool Climb_space::open(Endgame a)const{
+	auto f=m.find(a);
+	if(f==m.end()) return 1;
+	return f->second<2;
+}
+
+std::set<Endgame> Climb_space::open()const{
+	return to_set(FILTER(open,endgames()));
+}
+
 std::ostream& operator<<(std::ostream& o,Robot_strategy const& a){
 	o<<"Robot_strategy(";
 	#define X(A,B) o<<" "#B<<":"<<a.B;
@@ -84,43 +121,14 @@ double climb_score(Alliance_capabilities const& a,bool c0,bool c1,bool c2){
 	if(c2) v|=a[2].endgame;
 	if(v.empty()) return 0;
 	v=reversed(sort_by(v,[](auto x){ return points(x); }));
-	map<Endgame,int> m;
-	auto available=[&](Endgame g){
-		return m[g]<2;
-	};
-	auto mark=[&](Endgame g){
-		switch(g){
-			case Endgame::Traversal:
-				m[Endgame::Traversal]++;
-				m[Endgame::High]++;
-				break;
-			case Endgame::High:
-				m[Endgame::Traversal]++;
-				m[Endgame::High]++;
-				m[Endgame::Mid]++;
-				break;
-			case Endgame::Mid:
-				m[Endgame::High]++;
-				m[Endgame::Mid]++;
-				m[Endgame::Low]++;
-				break;
-			case Endgame::Low:
-				m[Endgame::Low]++;
-				break;
-			case Endgame::None:
-				//plenty of room on the floor
-				break;
-			default:
-				assert(0);
-		}
-	};
+	Climb_space space;
 
 	double total=0;
 	for(auto endgame_px:v){
-		auto f=filter_keys(available,endgame_px);
+		auto f=FILTER_KEYS(space.open,endgame_px);
 		if(f.empty()) continue;
 		auto target=argmax([](auto x){ return value(x.first)*x.second; },to_vec(f)).first;
-		mark(target);
+		space.fill(target);
 		auto left=sum(values(f));
 		assert(left>0);
 		total+=points(endgame_px);
