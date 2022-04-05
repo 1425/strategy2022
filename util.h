@@ -559,6 +559,16 @@ std::ostream& operator<<(std::ostream& o,std::tuple<A,B,C,D> const& a){
 	return o;
 }
 
+template<typename A,typename B,typename C,typename D,typename E>
+std::ostream& operator<<(std::ostream& o,std::tuple<A,B,C,D,E> const& a){
+	o<<"(";
+	o<<get<0>(a)<<","<<get<1>(a)<<",";
+	o<<get<2>(a)<<","<<get<3>(a)<<",";
+	o<<get<4>(a);
+	o<<")";
+	return o;
+}
+
 template<typename T>
 std::vector<T> tail(std::vector<T> a){
 	if(a.size()){
@@ -585,6 +595,22 @@ bool operator<(std::tuple<A,B,C> const& a,std::tuple<A,B,C> const& b){
 	if(std::get<1>(b)<std::get<1>(a)) return 0;
 	
 	return std::get<2>(a)<std::get<2>(b);
+}
+
+template<typename T>
+std::vector<T> flatten(std::vector<std::vector<T>> const& a){
+	std::vector<T> r;
+	for(auto elem:a){
+		for(auto x:elem){
+			r|=x;
+		}
+	}
+	return r;
+}
+
+template<typename A,typename B>
+std::ostream& operator<<(std::ostream& o,std::tuple<A,B> const& a){
+	return o<<"("<<get<0>(a)<<","<<get<1>(a)<<")";
 }
 
 #endif

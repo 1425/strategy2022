@@ -9,6 +9,21 @@
 
 using namespace std;
 
+std::ostream& operator<<(std::ostream& o,TBA_explicit const& a){
+	o<<"TBA_explicit( ";
+	#define X(A,B) o<<""#B<<":"<<a.B<<" ";
+	TBA_EXPLICIT(X)
+	#undef X
+	return o<<")";
+}
+
+std::ostream& operator<<(std::ostream& o,tba::Yes_no a){
+	if(a==tba::Yes_no::Yes){
+		return o<<"Yes";
+	}
+	return o<<"No";
+}
+
 template<typename T>
 multiset<T> operator-(multiset<T> a,T t){
 	//if you just do a.erase(t) you will remove all instances, not just one.
@@ -20,6 +35,18 @@ multiset<T> operator-(multiset<T> a,T t){
 }
 
 using Event_key=tba::Event_key;
+
+Team team_number(tba::Team_key const& a){
+	//return Team{stoi(a.str().substr(3,10))};
+	return Team{atoi(a.str().c_str()+3)};
+}
+
+tba::Cached_fetcher tba_fetcher(TBA_setup const& tba){
+	ifstream file{tba.auth_key_path};
+	string tba_key;
+	getline(file,tba_key);
+	return tba::Cached_fetcher{tba::Fetcher{tba::Nonempty_string{tba_key}},tba::Cache{tba.cache_path.c_str()}};
+}
 
 map<Team,double> solve1(vector<pair<vector<Team>,int>> const& a){
 	map<Team,vector<double>> m;
@@ -138,14 +165,10 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 }
 
 variant<map<Team,Robot_capabilities>,string> from_tba(
-	string const& tba_auth_key_path,
-	string const& tba_cache_path,
+	TBA_setup const& setup,
 	tba::Event_key const& event_key
 ){
-	ifstream file{tba_auth_key_path};
-	string tba_key;
-	getline(file,tba_key);
-	tba::Cached_fetcher f{tba::Fetcher{tba::Nonempty_string{tba_key}},tba::Cache{tba_cache_path.c_str()}};
+	auto f=tba_fetcher(setup);
 
 	try{
 		return process_data(f,event_key);
@@ -154,3 +177,68 @@ variant<map<Team,Robot_capabilities>,string> from_tba(
 	}
 }
 
+template<typename T>
+std::array<T,3> dup3(T t){
+	return {t,t,t};
+}
+
+template<typename A,typename B,typename C,typename D,typename E>
+auto zip(A const& a,B const& b,C const& c,D const& d,E const& e){
+	auto ai=begin(a),ae=end(a);
+	auto bi=begin(b),be=end(b);
+	auto ci=begin(c),ce=end(c);
+	auto di=begin(d),de=end(d);
+	auto ei=begin(e),ee=end(e);
+
+	vector<tuple<
+		ELEM(a),ELEM(b),ELEM(c),ELEM(d),ELEM(e)
+	>> r;
+	while(ai!=ae && bi!=be && ci!=ce && di!=de && ei!=ee){
+		r|=make_tuple(*ai,*bi,*ci,*di,*ei);
+		++ai;
+		++bi;
+		++ci;
+		++di;
+		++ei;
+	}
+	return r;
+}
+
+vector<TBA_explicit> process_match(tba::Match const& match){
+	if(match.comp_level!=tba::Competition_level::qm){
+		return {};
+	}
+
+	auto f=[=](tba::Alliance_color color,tba::Match_Alliance const& ma,tba::Match_Score_Breakdown_2022_Alliance const& b){
+		auto z=zip(
+			ma.team_keys,
+			dup3(match.match_number),
+			dup3(color),
+			array{b.taxiRobot1,b.taxiRobot2,b.taxiRobot3},
+			array{b.endgameRobot1,b.endgameRobot2,b.endgameRobot3}
+		);
+		return mapf(
+			[](auto x){
+				auto [a,b,c,d,e]=x;
+				return TBA_explicit{team_number(a),b,c,d==tba::Yes_no::Yes,e}; 
+			},
+			z
+		);
+	};
+	auto m=match.score_breakdown;
+	assert(m);
+	auto m1=*m;
+	using BD=tba::Match_Score_Breakdown_2022;
+	assert(std::holds_alternative<BD>(m1));
+	auto bd=std::get<BD>(m1);
+	//cout<<"m "<<match.match_number<<"\t"<<match.alliances.red.team_keys<<"\t"<<match.alliances.blue.team_keys<<"\n";
+	return f(tba::Alliance_color::RED,match.alliances.red,bd.red)|
+		f(tba::Alliance_color::BLUE,match.alliances.blue,bd.blue);
+}
+
+std::vector<TBA_explicit> tba_by_match(TBA_setup const& setup,tba::Event_key const& event){
+	(void)setup;
+	(void)event;
+	auto f=tba_fetcher(setup);
+	return flatten(mapf(process_match,event_matches(f,event)));
+}

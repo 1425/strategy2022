@@ -26,6 +26,8 @@ struct Useful_data{
 	#undef X
 };
 
+std::ostream& operator<<(std::ostream&,Useful_data const&);
+
 std::vector<Useful_data> parse_csv_inner(std::string const&,bool);
 Robot_capabilities to_robot_capabilities(std::vector<Useful_data> const& data,double discount_rate=0,std::vector<Useful_data> const& extra_data={});
 std::map<Team,Robot_capabilities> capabilities_by_team(std::vector<Useful_data> const&,double discount_rate=0);

@@ -12,6 +12,7 @@
 #include "qr_solve.hpp"
 #include "input_data.h"
 #include "map.h"
+#include "tba.h"
 
 using namespace std;
 
@@ -38,17 +39,6 @@ template<typename T>
 std::vector<T>& operator|=(std::vector<T>& a,T t){
 	a.push_back(t);
 	return a;
-}
-
-template<typename T>
-std::vector<T> flatten(std::vector<std::vector<T>> const& a){
-	std::vector<T> r;
-	for(auto elem:a){
-		for(auto x:elem){
-			r|=x;
-		}
-	}
-	return r;
 }
 
 template<typename T>
@@ -239,11 +229,6 @@ std::vector<Team> to_teams(std::vector<tba::Team_key> const& a){
 }
 
 template<typename A,typename B>
-std::ostream& operator<<(std::ostream& o,std::tuple<A,B> const& a){
-	return o<<"("<<get<0>(a)<<","<<get<1>(a)<<")";
-}
-
-template<typename A,typename B>
 std::vector<std::pair<A,B>> to_pairs(std::vector<std::tuple<A,B>> const& a){
 	return mapf(
 		[](auto x){
@@ -295,11 +280,8 @@ bool analyze_item(
 void f(){
 	//for an event, go calculate the outliers of OPR performance
 	//get list of (team,which item,z score)
-	
-	std::ifstream f("../tba/auth_key");
-	std::string tba_key;
-	getline(f,tba_key);
-	tba::Cached_fetcher cf{tba::Fetcher{tba::Nonempty_string{tba_key}},tba::Cache{}};
+
+	auto cf=tba_fetcher(TBA_setup{});
 
 	tba::Event_key event_key{"2020orore"};
 	const tba::Year YEAR{2020};

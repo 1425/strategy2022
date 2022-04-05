@@ -16,6 +16,13 @@
 
 //start generic code
 
+template<typename Func,typename T>
+auto filter_unique(Func f,T t){
+	auto f1=filter(f,t);
+	assert(f1.size()==1);
+	return f1[0];
+}
+
 template<size_t N,typename T>
 std::array<T,N> to_array(std::vector<T> const& v){
 	assert(v.size()==N);
@@ -157,12 +164,6 @@ string show(Picklist const& p){
 		)
 	);
 }
-
-//Move to tba.h?
-struct TBA_setup{
-	std::string auth_key_path="../tba/auth_key";
-	std::string cache_path="../tba/cache.db";
-};
 
 struct Args{
 	Team team{1425};
@@ -618,17 +619,6 @@ T median(vector<T> v){
 	return v[v.size()/2];
 }
 
-tba::Cached_fetcher tba_fetcher(TBA_setup const& tba){
-	ifstream file{tba.auth_key_path};
-	string tba_key;
-	getline(file,tba_key);
-	return tba::Cached_fetcher{tba::Fetcher{tba::Nonempty_string{tba_key}},tba::Cache{tba.cache_path.c_str()}};
-}
-
-Team team_number(tba::Team_key const& a){
-	return Team{stoi(a.str().substr(3,10))};
-}
-
 pair<double,double> predictor(std::vector<tba::Match_Simple> const& match_results,std::vector<Useful_data> const& v,double discount){
 	vector<double> error,squared_error;
 
@@ -817,6 +807,64 @@ void trend_check(std::string const& path,TBA_setup const& tba_setup){
 	}
 }
 
+void compare_matches(TBA_setup const& tba_setup,tba::Event_key const& event,std::string const& csv_path){
+	auto tba=tba_by_match(tba_setup,event);
+	auto scout=parse_csv_inner(csv_path,0);
+	PRINT(tba.size())
+	PRINT(scout.size())
+
+	auto tag=[](auto x){ return make_tuple(x.team,x.match); };
+	auto tags=[=](auto a){ return to_set(mapf(tag,a)); };
+	auto tba_played=tags(tba);//mapf([](auto x){ return make_tuple(x.team,x.match,x.alliance); },tba);
+	auto scout_played=tags(scout);//mapf([](auto x){ return make_tuple(x.team,x.match,x.alliance); },scout);
+
+	{
+		auto m1=tba_played-scout_played;
+		if(!m1.empty()){
+			cout<<"Missing scouting data:"<<m1<<"\n";
+		}
+	}
+
+	{
+		auto m1=scout_played-tba_played;
+		if(!m1.empty()){
+			cout<<"Missing tba data:"<<m1<<"\n";
+		}
+	}
+
+	using Match=int;
+	vector<tuple<Team,Match,string,string,string>> diffs;
+
+	auto both=tba_played&scout_played;
+	for(auto tag1:both){
+		auto f=[tag,tag1](auto source){ return filter_unique([=](auto x){ return tag(x)==tag1; },source); };
+		auto t=f(tba);
+		auto s=f(scout);
+
+		#define COMPARE(X) if(t.X!=s.X) diffs|=make_tuple(t.team,t.match,""#X,as_string(t.X),as_string(s.X));
+		COMPARE(alliance) //this should never happen
+		COMPARE(taxi)
+		COMPARE(endgame)
+		#undef COMPARE
+	}
+
+	print_lines(diffs);
+	cout<<"Diff:"<<diffs.size()<<" "<<both.size()<<"\n";
+	cout<<count(MAP(get<2>,diffs))<<"\n";
+	
+	map<string,multiset<pair<string,string>>> changes;
+	for(auto [team,match,element,tba,scouted]:diffs){
+		changes[element]|=make_pair(tba,scouted);
+	}
+	for(auto [element,ms]:changes){
+		cout<<element<<"\n";
+		//print_r(1,count(ms));
+		for(auto [a,i]:count(ms)){
+			cout<<"\t"<<i<<"\t"<<a<<"\n";
+		}
+	}
+}
+
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
 
@@ -838,7 +886,7 @@ int main(int argc,char **argv){
 	}
 
 	{
-		auto p1=from_tba(args.tba.auth_key_path,args.tba.cache_path,args.event_key);
+		auto p1=from_tba(args.tba,args.event_key);
 		if(holds_alternative<Caps>(p1)){
 			v|=make_pair("tba",std::get<Caps>(p1));
 		}else{
@@ -879,6 +927,7 @@ int main(int argc,char **argv){
 	}
 
 	if(args.compare){
+		compare_matches(args.tba,args.event_key,args.scouting_data_path);
 		compare(v);
 	}
 

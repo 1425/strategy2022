@@ -117,12 +117,17 @@ std::set<K> keys(std::map<K,V> a){
 }
 
 template<typename T>
-std::map<T,unsigned> count(std::vector<T> const& v){
-	std::map<T,unsigned> r;
+std::map<T,size_t> count(std::vector<T> const& v){
+	std::map<T,size_t> r;
 	for(auto x:v){
 		r[x]++;
 	}
 	return r;
+}
+
+template<typename T>
+auto count(std::multiset<T> const& v){
+	return count(to_vec(v));
 }
 
 template<typename K,typename V>

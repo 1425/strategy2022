@@ -52,11 +52,6 @@ double std_dev(std::vector<double> const& v){
 	)));
 }
 
-template<typename A,typename B>
-std::ostream& operator<<(std::ostream& o,std::tuple<A,B> const& a){
-	return o<<"("<<get<0>(a)<<","<<get<1>(a)<<")";
-}
-
 std::string upper(std::string const& s){
 	return boost::to_upper_copy<std::string>(s);
 }

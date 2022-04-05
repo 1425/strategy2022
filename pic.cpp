@@ -6,6 +6,7 @@
 #include "../tba/curl.h"
 #include "util.h"
 #include "map.h"
+#include "tba.h"
 
 using namespace std;
 using namespace tba;
@@ -102,16 +103,11 @@ void team_media(Cached_fetcher &f,Team_key team){
 	}
 }
 
-int main1(){
+int main2(){
 	//TODO: make it so that can look at predictions and pull those teams up
 	//or maybe just do all in the district?
 
-	string tba_auth_key_path="../tba/auth_key";
-	string tba_cache_path="../tba/cache.db";
-	ifstream file{tba_auth_key_path};
-	string tba_key;
-	getline(file,tba_key);
-	tba::Cached_fetcher f{tba::Fetcher{tba::Nonempty_string{tba_key}},tba::Cache{tba_cache_path.c_str()}};
+	auto f=tba_fetcher(TBA_setup{});
 
 	//Event_key event_key{"2022orsal"};
 	for(auto event_key:district_events_keys(f,District_key{"2022pnw"})){
@@ -124,7 +120,7 @@ int main1(){
 
 int main(){
 	try{
-		return main1();
+		return main2();
 	}catch(Decode_error const& s){
 		cerr<<s<<"\n";
 		return 1;
