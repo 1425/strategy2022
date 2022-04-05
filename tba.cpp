@@ -58,8 +58,7 @@ map<Team,double> solve1(vector<pair<vector<Team>,int>> const& a){
 	return map_values([](auto x){ return mean(x); },m);
 }
 
-template<typename F>
-map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
+map<Team,Robot_capabilities> process_data(tba::Cached_fetcher& fetcher,Event_key key){
 	//initially, just going to look at a single event
 	//Event_key key{"2022orwil"};//TODO: Make this be passed in.
 	map<Team,vector<bool>> taxi_by_team;
@@ -112,7 +111,12 @@ map<Team,Robot_capabilities> process_data(F& fetcher,Event_key key){
 	for(auto match:event_matches(fetcher,key)){
 		//PRINT(match)
 		auto m=match.score_breakdown;
-		assert(m);
+		if(!m){
+			//cout<<"No score breakdown:"<<match.key<<"\n";
+			//if no score breakdown, then ignore the match.
+			continue;
+		}
+
 		auto s=*m;
 		if(!std::holds_alternative<tba::Match_Score_Breakdown_2022>(s)){
 			PRINT(match.key);

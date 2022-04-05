@@ -11,12 +11,6 @@
 
 using namespace std;
 
-template<typename T>
-T last(vector<T> const& v){
-	assert(v.size());
-	return v[v.size()-1];
-}
-
 //TODO: Make it so that the data can be passed in.
 
 string read_data(std::string const& path){

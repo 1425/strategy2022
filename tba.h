@@ -16,6 +16,8 @@ std::variant<std::map<Team,Robot_capabilities>,std::string> from_tba(
 	tba::Event_key const&
 );
 
+std::map<Team,Robot_capabilities> process_data(tba::Cached_fetcher&,tba::Event_key);
+
 #define TBA_EXPLICIT(X)\
 	X(Team,team)\
 	X(int,match)\

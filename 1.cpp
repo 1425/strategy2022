@@ -13,6 +13,7 @@
 #include "array.h"
 #include "strategy.h"
 #include "util.h"
+#include "opr.h"
 
 //start generic code
 
@@ -77,6 +78,17 @@ T median(std::vector<T> v){
 //start program-specific code
 
 using namespace std;
+
+vector<Team> expected_2022pncmp(){
+	vector<int> v{
+		2046,7034,4089,2910,4488,2930,7461,2990,4911,1540,2976,955,
+		3636,2147,360,5827,8532,488,2471,3218,6831,2557,3663,1294,
+		3786,1899,492,568,2522,1425,3711,1595,1432,4131,3674,2521,
+		5920,4513,1359,997,4125,4512,6350,8248,5970,957,2811,2412,
+		2635,4915,2928
+	};
+	return MAP(Team,v);
+}
 
 string show(map<Team,Robot_capabilities> const& a){
 	auto title1="Estimated Robot capabilities";
@@ -178,7 +190,7 @@ struct Args{
 	string scouting_data_path="data/orwil_match.csv";
 	string valor_data_path="data/Valor Scout.html";
 	TBA_setup tba;
-	tba::Event_key event_key{"2022orwil"};
+	tba::Event_key event_key{"2022pncmp"};
 	bool verbose=0;
 	bool compare=0;
 	std::optional<Team> team_details;
@@ -883,6 +895,52 @@ map<Team,Robot_capabilities> combined_data(Path scouting_data_path,TBA_setup con
 	return capabilities_by_team(p,0.07);
 }
 
+tba::Event_key most_recent(tba::Cached_fetcher &f,vector<tba::Event_key> const& v){
+	return argmax(
+		[&](auto x){
+			auto d=event_simple(f,x).start_date;
+			assert(d);
+			return *d;
+		},
+		v
+	);
+}
+
+auto hist_test(TBA_setup const& tba_setup,tba::Event_key const& event){
+	auto f=tba_fetcher(tba_setup);
+	auto teams=[&](){
+		if(event=="2022pncmp"){
+			return expected_2022pncmp();
+		}
+		auto e=event_teams_keys(f,event);
+		return mapf(to_team,e);
+	}();
+	tba::Year year{2022}; //TODO: Make this get set based on the event.
+
+	//for each of the teams, look at their most recent event
+	map<Team,Robot_capabilities> r;
+	for(auto team:teams){
+		PRINT(team);
+		auto events=team_events_year_keys(f,tba::Team_key{"frc"+as_string(team)},year);
+
+		//look only at previous events.
+		events=filter([=](auto x){ return x!=event; },events);
+
+		assert(events.size());
+		//auto m=team_event_matches(f,team,last(events));
+		auto mr=most_recent(f,events);
+		PRINT(mr);
+		auto p=process_data(f,mr);//could cache this.
+		auto f=p.find(team);
+		if(f==p.end()){
+			PRINT(keys(p));
+			nyi
+		}
+		r[team]=f->second;
+	}
+	return r;
+}
+
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
 
@@ -906,7 +964,20 @@ int main(int argc,char **argv){
 	v|=make_pair("scouted",parse_csv(args.scouting_data_path,args.verbose));
 	vector<Team> no_defense {Team{3812}, Team{1432}};
 	for (auto team: no_defense){
-		v[0].second[team].defense_okay = 0;
+		v[v.size()-1].second[team].defense_okay = 0;
+	}
+
+	try{
+		auto h=hist_test(args.tba,args.event_key);
+		for(auto [team,info]:h){
+			auto& base=v[0].second;
+			auto f=base.find(team);
+			if(f==base.end()){
+				base[team]=info;
+			}
+		}
+	}catch(...){
+		cout<<"History test failed\n";
 	}
 
 	{

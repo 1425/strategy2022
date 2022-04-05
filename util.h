@@ -613,4 +613,10 @@ std::ostream& operator<<(std::ostream& o,std::tuple<A,B> const& a){
 	return o<<"("<<get<0>(a)<<","<<get<1>(a)<<")";
 }
 
+template<typename T>
+T last(std::vector<T> const& v){
+	assert(v.size());
+	return v[v.size()-1];
+}
+
 #endif
