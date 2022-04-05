@@ -52,23 +52,31 @@ std::vector<std::filesystem::directory_entry> to_vec(std::filesystem::directory_
 	return r;
 }
 
-//start program-specific code
-
-using namespace std;
-
-string round2(double d){
-	stringstream ss;
+std::string round2(double d){
+	std::stringstream ss;
 	ss<<std::setprecision(2);
 	ss<<d;
 	return ss.str();
 }
 
-string round3(double d){
-	stringstream ss;
+std::string round3(double d){
+	std::stringstream ss;
 	ss<<std::setprecision(3);
 	ss<<d;
 	return ss.str();
 }
+
+template<typename T>
+T median(std::vector<T> v){
+	assert(v.size());
+	std::sort(v.begin(),v.end());
+	//this is done the simplest way; could do something "more correct" when there is an even number of items.
+	return v[v.size()/2];
+}
+
+//start program-specific code
+
+using namespace std;
 
 string show(map<Team,Robot_capabilities> const& a){
 	auto title1="Estimated Robot capabilities";
@@ -575,7 +583,7 @@ void compare_inner(vector<pair<string,Caps>> const& v){
 	using Source=string;
 	vector<tuple<double,Team,map<Source,Robot_capabilities>>> diff;
 	auto k=or_all(mapf([](auto x){ return keys(x.second); },v));
-		
+	
 	for(auto team:k){
 		map<string,Robot_capabilities> caps;
 		for(auto [source,data]:v){
@@ -610,13 +618,6 @@ void compare(vector<pair<string,Caps>> v){
 		}
 	}
 	compare_inner(v);
-}
-
-template<typename T>
-T median(vector<T> v){
-	assert(v.size());
-	sort(v.begin(),v.end());
-	return v[v.size()/2];
 }
 
 pair<double,double> predictor(std::vector<tba::Match_Simple> const& match_results,std::vector<Useful_data> const& v,double discount){
@@ -865,6 +866,23 @@ void compare_matches(TBA_setup const& tba_setup,tba::Event_key const& event,std:
 	}
 }
 
+using Path=std::string;
+
+map<Team,Robot_capabilities> combined_data(Path scouting_data_path,TBA_setup const& setup,tba::Event_key const& event){
+	auto p=parse_csv_inner(scouting_data_path,0);
+	auto t=tba_by_match(setup,event);
+	for(auto &match_data:p){
+		auto f=filter([=](auto x){ return match_data.team==x.team && match_data.match==x.match; },t);
+		assert(f.size()<2);
+		if(!f.empty()){
+			auto x=f[0];
+			match_data.taxi=x.taxi;
+			match_data.endgame=x.endgame;
+		}
+	}
+	return capabilities_by_team(p,0.07);
+}
+
 int main(int argc,char **argv){
 	auto args=parse_args(argc,argv);
 
@@ -878,6 +896,12 @@ int main(int argc,char **argv){
 	}
 
 	vector<pair<string,Caps>> v;
+
+	try{
+		v|=make_pair("combined",combined_data(args.scouting_data_path,args.tba,args.event_key));
+	}catch(...){
+		//ignore, just don't add as an option
+	}
 
 	v|=make_pair("scouted",parse_csv(args.scouting_data_path,args.verbose));
 	vector<Team> no_defense {Team{3812}, Team{1432}};
@@ -895,12 +919,12 @@ int main(int argc,char **argv){
 		}
 	}
 
+	v|=make_pair("valor",valor_data(args.valor_data_path));
+
 	if(v.empty()){
 		cout<<"Error: No data available.\n";
 		return 1;
 	}
-
-	v|=make_pair("valor",valor_data(args.valor_data_path));
 
 	map<Team,set<string>> available;
 	for(auto [source,data]:v){
@@ -918,12 +942,14 @@ int main(int argc,char **argv){
 		return 0;
 	}
 
+	auto data_to_use=v[0].second;
+
 	if(args.team_list){
-		return match_strategy(*args.team_list,v[0].second);
+		return match_strategy(*args.team_list,data_to_use);
 	}
 
 	if(args.match6){
-		return match6(*args.match6,v[0].second);
+		return match6(*args.match6,data_to_use);
 	}
 
 	if(args.compare){
@@ -939,7 +965,6 @@ int main(int argc,char **argv){
 		print_lines(sorted(v));
 	}*/
 
-	auto data_to_use=v[0].second;
 	write_file("cap.html",show(data_to_use));
 
 	auto pl=make_picklist(args.team,data_to_use);
