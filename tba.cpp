@@ -230,6 +230,11 @@ vector<TBA_explicit> process_match(tba::Match const& match){
 		);
 	};
 	auto m=match.score_breakdown;
+	if(!m){
+		//PRINT(match);
+		//No data; possibly not played yet!
+		return {};
+	}
 	assert(m);
 	auto m1=*m;
 	using BD=tba::Match_Score_Breakdown_2022;
