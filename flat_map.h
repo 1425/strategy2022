@@ -6,8 +6,8 @@ class Flat_map{
 	public:
 	using P=std::pair<K,V>;
 	using Data=std::vector<P>;
-	using iterator=Data::iterator;
-	using const_iterator=Data::const_iterator;
+	using iterator=typename Data::iterator;
+	using const_iterator=typename Data::const_iterator;
 
 	private:
 	Data data; //this is not kept in any order.
